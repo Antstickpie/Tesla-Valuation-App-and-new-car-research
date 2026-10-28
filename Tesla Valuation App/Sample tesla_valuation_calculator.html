@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tesla Model Y — Valuation & Offer Calculator</title>
+<style>
+  :root {
+    --bg: #0b0d13;
+    --card-bg: #151822;
+    --card-hover: #1c2130;
+    --card-border: #262c3e;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --primary: #e11d48;
+    --accent: #38bdf8;
+    --success: #22c55e;
+    --success-bg: rgba(34, 197, 94, 0.15);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.15);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.15);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin:0; padding:16px; padding-bottom:80px; line-height:1.5;}
+  .container{max-width:680px;margin:0 auto;}
+  .header{background:linear-gradient(135deg,#1b1f2e 0%,#10121a 100%);border:1px solid var(--card-border);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.5);}
+  h1{font-size:1.35rem;margin:0 0 6px 0;color:#fff;font-weight:700;}
+  .subtitle{font-size:0.82rem;color:var(--text-muted);margin-bottom:14px;}
+  .tabs{display:flex;gap:8px;margin-bottom:12px;}
+  .tab{flex:1;padding:8px 0;background:#222736;color:var(--text);border:1px solid var(--card-border);border-radius:8px;text-align:center;cursor:pointer;}
+  .tab.active{background:var(--primary);color:#fff;}
+  .section{display:none;}
+  .section.active{display:block;}
+  .sticky-result{position:sticky;top:10px;z-index:100;background:linear-gradient(135deg,#1e2235 0%,#131722 100%);border:2px solid var(--primary);border-radius:16px;padding:16px 20px;margin-bottom:20px;box-shadow:0 8px 30px rgba(225,29,72,0.25),0 4px 12px rgba(0,0,0,0.8);display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px);}
+  .result-label{font-size:0.75rem;text-transform:uppercase;color:var(--accent);font-weight:700;letter-spacing:0.05em;}
+  .result-val{font-size:2.1rem;font-weight:800;color:#fff;font-family:ui-monospace,SFMono-Regular,monospace;line-height:1.1;}
+  .result-delta{font-size:0.85rem;font-weight:600;margin-top:4px;}
+  .delta-pos{color:var(--success);} .delta-neg{color:var(--danger);}
+  .warranty-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:16px;margin-bottom:16px;}
+  .warranty-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .warranty-badge{padding:4px 10px;border-radius:20px;font-size:0.78rem;font-weight:700;}
+  .wb-green{background:var(--success-bg);color:var(--success);border:1px solid var(--success);} .wb-amber{background:var(--warning-bg);color:var(--warning);border:1px solid var(--warning);} .wb-red{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger);}
+  .progress-bg{background:#232838;height:10px;border-radius:5px;overflow:hidden;margin:10px 0 6px 0;}
+  .progress-bar{height:100%;border-radius:5px;transition:width .3s ease,background .3s ease;}
+  .card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:18px;margin-bottom:16px;}
+  .card-title{font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+  .card-title span.badge{font-size:0.72rem;color:var(--accent);font-weight:600;text-transform:uppercase;background:rgba(56,189,248,0.12);padding:2px 8px;border-radius:6px;}
+  .form-group{margin-bottom:14px;}
+  label{display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.03em;}
+  input[type="number"],input[type="text"]{width:100%;background:#0f121a;border:1px solid #334155;border-radius:8px;color:#fff;font-family:ui-monospace,monospace;font-size:1.1rem;padding:10px 12px;font-weight:700;outline:none;transition:border-color .2s;}
+  input:focus{border-color:var(--accent);}
+  .segmented{display:flex;background:#0f121a;border:1px solid #334155;border-radius:10px;padding:4px;gap:4px;}
+  .segmented label{flex:1;margin:0;text-align:center;padding:10px 8px;font-size:0.85rem;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:all .2s ease;user-select:none;}
+  .segmented input[type="radio"]{display:none;}
+  .segmented input[type="radio"]:checked+label,.segmented label.active{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(225,29,72,0.4);}
+  .breakdown-table{width:100%;border-collapse:collapse;font-size:0.86rem;}
+  .breakdown-table tr{border-bottom:1px solid #1f2433;}
+  .breakdown-table td{padding:8px 4px;}
+  .breakdown-table td.val{text-align:right;font-family:ui-monospace,monospace;font-weight:700;}
+  .deduction-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #232838;}
+  .checkbox-custom{display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;}
+  .checkbox-custom input{width:18px;height:18px;accent-color:var(--primary);} 
+  .btn-row{display:flex;gap:10px;margin-top:16px;}
+  .btn{flex:1;padding:12px;border-radius:10px;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;text-align:center;transition:opacity .2s;}
+  .btn-secondary{background:#222736;color:var(--text);border:1px solid var(--card-border);} .btn-primary{background:var(--primary);color:#fff;}
+  .btn:active{opacity:0.8;}
+  .base-box{background:rgba(56,189,248,0.08);border:1px dashed #38bdf8;border-radius:10px;padding:12px;font-size:0.78rem;color:#bae6fd;margin-bottom:16px;line-height:1.6;}
+  .base-box strong{color:#fff;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#22c55e;color:#000;padding:10px 20px;border-radius:20px;font-weight:700;font-size:0.85rem;display:none;z-index:999;box-shadow:0 4px 15px rgba(0,0,0,0.5);}
+</style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Tesla Model Y — Valuation Engine</h1>
+    <div class="subtitle">Compute maximum willing‑to‑pay price & warranty against a configurable baseline</div>
+    <div class="base-box">
+      <strong>Standard Baseline (Reference Point):</strong><br>
+      • 160,000 km | Pearl White Body | Black Interior<br>
+      • Basic Autopilot | HW3 | AMD Ryzen (Yes) | Long Range
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" id="calcTab">Calculator</div>
+    <div class="tab" id="settingsTab">Settings</div>
+    <div class="tab" id="compareTab">Compare</div>
+  </div>
+  <div class="section active" id="calcSection">
+    <div class="sticky-result">
+      <div>
+        <div class="result-label">Maximum Willing To Pay</div>
+        <div class="result-val" id="totalOfferDisplay">€0</div>
+        <div class="result-delta" id="deltaSummaryDisplay"></div>
+      </div>
+      <div style="text-align:right;">
+        <button class="btn btn-secondary" style="padding:8px 12px;font-size:0.78rem;" onclick="copyOfferSummary()">📋 Copy Offer</button>
+      </div>
+    </div>
+    <div class="warranty-card">
+      <div class="warranty-header"><div style="font-size:0.85rem;font-weight:700;">Drivetrain & Battery Warranty</div><div class="warranty-badge wb-amber" id="warrantyBadge"></div></div>
+      <div class="progress-bg"><div class="progress-bar" id="warrantyBar"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-top:4px;">
+        <span id="warrantyKmLeft"></span>
+        <span id="warrantyYearsCalc"></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Vehicle Parameters</span><span class="badge">Dynamic Inputs</span></div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="form-group"><label for="currentKm">Current Mileage (KM)</label><input type="number" id="currentKm" step="1000" oninput="calculate()"></div>
+        <div class="form-group"><label for="annualKm">Your Annual KM</label><input type="number" id="annualKm" step="1000" oninput="calculate()"></div>
+      </div>
+      <div class="form-group"><label>Model Trim</label><div class="segmented"><input type="radio" name="trim" id="trim_lr" value="LR"><label for="trim_lr">Long Range (Base)</label><input type="radio" name="trim" id="trim_perf" value="Perf"><label for="trim_perf">Performance (+€2,500)</label></div></div>
+      <div class="form-group"><label>Body Colour</label><div class="segmented"><input type="radio" name="color_body" id="color_white" value="White"><label for="color_white">White (Base)</label><input type="radio" name="color_body" id="color_other" value="Other"><label for="color_other">Other / Black / Metallic (+€500)</label></div></div>
+      <div class="form-group"><label>Interior Colour</label><div class="segmented"><input type="radio" name="color_interior" id="int_black" value="Black"><label for="int_black">Black (Base)</label><input type="radio" name="color_interior" id="int_white" value="White"><label for="int_white">White (+€500)</label></div></div>
+      <div class="form-group"><label>Autopilot Package</label><div class="segmented"><input type="radio" name="ap_pkg" id="ap_basic" value="Basic"><label for="ap_basic">Autopilot (Base)</label><input type="radio" name="ap_pkg" id="ap_eap" value="EAP"><label for="ap_eap">EAP (+€1,200)</label><input type="radio" name="ap_pkg" id="ap_fsd" value="FSD"><label for="ap_fsd">FSD (+€2,500)</label></div></div>
+      <div class="form-group"><label>Hardware Version (FSD Computer)</label><div class="segmented"><input type="radio" name="hw_ver" id="hw_3" value="HW3"><label for="hw_3">HW3 (Base)</label><input type="radio" name="hw_ver" id="hw_4" value="HW4"><label for="hw_4">HW4 (+€1,800)</label></div></div>
+      <div class="form-group"><label>Processor (MCU)</label><div class="segmented"><input type="radio" name="mcu_proc" id="proc_ryzen" value="Ryzen"><label for="proc_ryzen">AMD Ryzen (Base Yes)</label><input type="radio" name="mcu_proc" id="proc_atom" value="Atom"><label for="proc_atom">Intel Atom (-€1,800)</label></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Deductions for Defects / Tires</span><span class="badge" style="color:var(--danger);background:var(--danger-bg);">Negotiation Deductions</span></div>
+      <div class="deduction-item"><label class="checkbox-custom"><input type="checkbox" id="ded_tires" onchange="calculate()"><span>Worn / 2‑3mm Tires Replacement</span></label><span style="font-family:monospace;color:var(--danger);font-weight:700;">-€900</span></div>
+      <div class="deduction-item"><label class="checkbox-custom"><input type="checkbox" id="ded_curbrash" onchange="calculate()"><span>Curb Rash on 21" Uberturbines (Refurbish)</span></label><span style="font-family:monospace;color:var(--danger);font-weight:700;">-€300</span></div>
+      <div class="deduction-item"><label class="checkbox-custom"><input type="checkbox" id="ded_bumper" onchange="calculate()"><span>Scratched / Peeling Front Bumper Repaint</span></label><span style="font-family:monospace;color:var(--danger);font-weight:700;">-€450</span></div>
+      <div class="deduction-item"><label class="checkbox-custom"><input type="checkbox" id="ded_windshield" onchange="calculate()"><span>Windshield Wiper Scratch / Chip</span></label><span style="font-family:monospace;color:var(--danger);font-weight:700;">-€350</span></div>
+      <div class="form-group" style="margin-top:12px;"><label for="customDeduction">Other Custom Deductions (€)</label><input type="number" id="customDeduction" value="0" step="50" oninput="calculate()"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Calculation Breakdown</span><span class="badge">Itemized</span></div>
+      <table class="breakdown-table" id="breakdownTable"><tbody></tbody></table>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="copyOfferSummary()">Copy Offer Text</button></div>
+  </div>
+  <div class="section" id="settingsSection">
+    <div class="card">
+      <div class="card-title"><span>Baseline & Adjustment Settings</span></div>
+      <div class="form-group"><label for="baseKm">Baseline Kilometers</label><input type="number" id="baseKm" value="160000" step="1000" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="basePriceAnchor">Baseline Car Anchor (€)</label><input type="number" id="basePriceAnchor" value="23500" step="250" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="yearValue">Value per Warranty Year (€)</label><input type="number" id="yearValue" value="1000" step="50" oninput="saveSettings()"></div>
+      <hr style="margin:12px 0; border-color:var(--card-border);"/>
+      <div class="form-group"><label for="annualKm">Annual KM (km)</label><input type="number" id="annualKm" value="25000" step="1000" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="perfAdder">Performance Trim Add‑on (€)</label><input type="number" id="perfAdder" value="2500" step="100" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="colorAdder">Body Colour Add‑on (€)</label><input type="number" id="colorAdder" value="500" step="50" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="interiorAdder">Interior Colour Add‑on (€)</label><input type="number" id="interiorAdder" value="500" step="50" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="eapAdder">EAP Add‑on (€)</label><input type="number" id="eapAdder" value="1200" step="50" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="fsdAdder">FSD Add‑on (€)</label><input type="number" id="fsdAdder" value="2500" step="50" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="hw4Adder">HW4 Add‑on (€)</label><input type="number" id="hw4Adder" value="1800" step="50" oninput="saveSettings()"></div>
+      <div class="form-group"><label for="atomPenalty">Intel Atom Penalty (€)</label><input type="number" id="atomPenalty" value="1800" step="50" oninput="saveSettings()"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied to clipboard!</div>
+<script>
+  const STORAGE_KEY = 'tesla_valuation_state_v2';
+  const DEFAULTS = {
+    baseKm: 160000,
+    basePriceAnchor: 23500,
+    // Value per warranty year in euros (replaces kmRate)
+    yearValue: 1000,
+    perfAdder: 2500,
+    colorAdder: 500,
+    interiorAdder: 500,
+    eapAdder: 1200,
+    fsdAdder: 2500,
+    hw4Adder: 1800,
+    atomPenalty: 1800,
+    // UI defaults for main form
+    currentKm: 160000,
+    annualKm: 25000,
+    trim: 'LR',
+    color_body: 'White',
+    color_interior: 'Black',
+    ap_pkg: 'Basic',
+    hw_ver: 'HW3',
+    mcu_proc: 'Ryzen',
+    ded_tires: false,
+    ded_curbrash: false,
+    ded_bumper: false,
+    ded_windshield: false,
+    customDeduction: 0
+  };
+
+  function init(){
+    loadState();
+    attachTabHandlers();
+    calculate();
+  }
+
+  function attachTabHandlers(){
+    document.getElementById('calcTab').onclick = () => switchTab('calc');
+    document.getElementById('settingsTab').onclick = () => switchTab('settings');
+    document.getElementById('compareTab').onclick = () => switchTab('compare');
+  }
+  function switchTab(sec){
+    document.getElementById('calcSection').classList.toggle('active', sec==='calc');
+    document.getElementById('settingsSection').classList.toggle('active', sec==='settings');
+    document.getElementById('calcTab').classList.toggle('active', sec==='calc');
+    document.getElementById('settingsTab').classList.toggle('active', sec==='settings');
+  }
+
+  function calculate(){
+    const s = getSettings();
+    const currentKm = parseFloat(document.getElementById('currentKm').value)||s.currentKm;
+    const annualKm = parseFloat(document.getElementById('annualKm').value)||s.annualKm;
+    const baseAnchor = parseFloat(document.getElementById('basePriceAnchor').value)||s.basePriceAnchor;
+    const yearValue = parseFloat(document.getElementById('yearValue').value)||s.yearValue;
+    const trim = document.querySelector('input[name="trim"]:checked')?.value || s.trim;
+    const bodyColor = document.querySelector('input[name="color_body"]:checked')?.value || s.color_body;
+    const intColor = document.querySelector('input[name="color_interior"]:checked')?.value || s.color_interior;
+    const apPkg = document.querySelector('input[name="ap_pkg"]:checked')?.value || s.ap_pkg;
+    const hwVer = document.querySelector('input[name="hw_ver"]:checked')?.value || s.hw_ver;
+    const proc = document.querySelector('input[name="mcu_proc"]:checked')?.value || s.mcu_proc;
+
+    const dedTires = document.getElementById('ded_tires').checked ? 900 : 0;
+    const dedCurb = document.getElementById('ded_curbrash').checked ? 300 : 0;
+    const dedBumper = document.getElementById('ded_bumper').checked ? 450 : 0;
+    const dedWind = document.getElementById('ded_windshield').checked ? 350 : 0;
+    const customDed = parseFloat(document.getElementById('customDeduction').value)||0;
+    const totalDeductions = dedTires+dedCurb+dedBumper+dedWind+customDed;
+
+    const remainingKm = 190000 - currentKm;
+    const warrantyYears = annualKm>0 ? remainingKm/annualKm : 0;
+    const wBadge=document.getElementById('warrantyBadge'); const wBar=document.getElementById('warrantyBar'); const wKm=document.getElementById('warrantyKmLeft'); const wYr=document.getElementById('warrantyYearsCalc');
+    if(remainingKm<=0){wBadge.className='warranty-badge wb-red'; wBadge.textContent='Warranty Expired'; wBar.style.width='0%'; wBar.style.background='var(--danger)'; wKm.textContent='0 km left'; wYr.textContent='0 Years left'} else {const pct=Math.min(100,Math.max(0,(remainingKm/190000)*100)); wBar.style.width=pct+'%'; wKm.textContent=`${Math.round(remainingKm).toLocaleString()} km remaining`; wYr.textContent=`${warrantyYears.toFixed(2)} Years left`;
+      if(warrantyYears>=2){wBadge.className='warranty-badge wb-green'; wBadge.textContent=`${warrantyYears.toFixed(1)} Years Left`; wBar.style.background='var(--success)'} else if(warrantyYears>=1){wBadge.className='warranty-badge wb-amber'; wBadge.textContent=`${warrantyYears.toFixed(2)} Years Left`; wBar.style.background='var(--warning)'} else {wBadge.className='warranty-badge wb-red'; wBadge.textContent=`${warrantyYears.toFixed(2)} Years (<1 yr)`; wBar.style.background='var(--danger)'} }
+
+    let deltas=[];
+    const warrantyDelta = warrantyYears * s.yearValue; deltas.push({item:`Warranty (${warrantyYears.toFixed(2)} yrs)`,val:warrantyDelta});
+    const trimDelta = (trim==='Perf')?s.perfAdder:0; deltas.push({item:`Trim (${trim==='Perf'?'Performance':'Long Range'})`,val:trimDelta});
+    const bodyDelta = (bodyColor==='Other')?s.colorAdder:0; deltas.push({item:`Body Colour (${bodyColor==='Other'?'Other/Metallic':'White'})`,val:bodyDelta});
+    const intDelta = (intColor==='White')?s.interiorAdder:0; deltas.push({item:`Interior Colour (${intColor})`,val:intDelta});
+    let apDelta=0,apName='Basic Autopilot'; if(apPkg==='EAP'){apDelta=s.eapAdder; apName='EAP'} if(apPkg==='FSD'){apDelta=s.fsdAdder; apName='FSD'} deltas.push({item:`Autopilot (${apName})`,val:apDelta});
+    const hwDelta = (hwVer==='HW4')?s.hw4Adder:0; deltas.push({item:`Hardware (${hwVer})`,val:hwDelta});
+    const procDelta = (proc==='Atom')?-s.atomPenalty:0; deltas.push({item:`Processor (${proc})`,val:procDelta});
+    if(totalDeductions>0){deltas.push({item:'Condition Deductions',val:-totalDeductions});}
+    const totalDelta = deltas.reduce((a,d)=>a+d.val,0);
+    const finalOffer = Math.round(baseAnchor + totalDelta);
+    document.getElementById('totalOfferDisplay').textContent=`€${finalOffer.toLocaleString()}`;
+    const sign = totalDelta>=0?'+':''; document.getElementById('deltaSummaryDisplay').innerHTML=`Baseline: €${baseAnchor.toLocaleString()} (<span class="${totalDelta>=0?'delta-pos':'delta-neg'}">${sign}€${Math.round(totalDelta).toLocaleString()} adjustments</span>)`;
+    renderBreakdown(baseAnchor,deltas,finalOffer);
+    saveState();
+  }
+
+  function renderBreakdown(baseAnchor,deltas,finalOffer){
+    const tbody=document.querySelector('#breakdownTable tbody');
+    let html=`<tr><td style="font-weight:700;color:#fff;">Baseline Reference</td><td class="val" style="color:var(--accent);">€${Math.round(baseAnchor).toLocaleString()}</td></tr>`;
+    deltas.forEach(d=>{const isPos=d.val>0; const color=isPos?'var(--success)':(d.val===0?'var(--text-muted)':'var(--danger)'); const prefix=isPos?'+':''; html+=`<tr><td style="color:var(--text-muted);">${d.item}</td><td class="val" style="color:${color};">${d.val===0?'€0':prefix+'€'+Math.round(d.val).toLocaleString()}</td></tr>`;});
+    html+=`<tr style="border-top:2px solid var(--primary);font-size:1.05rem;"><td style="font-weight:800;color:#fff;padding-top:12px;">Final Maximum Willing‑To‑Pay:</td><td class="val" style="color:#fff;font-size:1.15rem;padding-top:12px;font-weight:800;">€${finalOffer.toLocaleString()}</td></tr>`;
+    tbody.innerHTML=html;
+  }
+
+  function copyOfferSummary(){
+    const offer=document.getElementById('totalOfferDisplay').textContent;
+    const km=document.getElementById('currentKm').value;
+    const trim=document.querySelector('input[name="trim"]:checked')?.value==='Perf'?'Performance':'Long Range';
+    const ap=document.querySelector('input[name="ap_pkg"]:checked')?.value;
+    const warranty=document.getElementById('warrantyBadge').textContent;
+    const notes=[]; if(document.getElementById('ded_tires').checked) notes.push('- Tire replacement (€900)'); if(document.getElementById('ded_curbrash').checked) notes.push('- Curb rash repairs (€300)'); if(document.getElementById('ded_bumper').checked) notes.push('- Bumper repaint (€450)');
+    const text=`Tesla Model Y ${trim} Valuation:\nMileage: ${Number(km).toLocaleString()} km (${warranty})\nPackage: ${ap}\n${notes.join('\n')}\nMaximum Offer: ${offer}`;
+    navigator.clipboard.writeText(text).then(()=>showToast()).catch(()=>alert(text));
+  }
+  function showToast(){const t=document.getElementById('toast'); t.style.display='block'; setTimeout(()=>{t.style.display='none';},2000);}
+
+  function getSettings(){
+    const stored=localStorage.getItem(STORAGE_KEY);
+    if(stored){try{return JSON.parse(stored);}catch(e){console.error(e);}}
+    return {...DEFAULTS};
+  }
+  function saveState(){
+    const state={
+      baseKm: document.getElementById('baseKm').value,
+      basePriceAnchor: document.getElementById('basePriceAnchor').value,
+      // kmRate removed; no longer used
+      perfAdder: document.getElementById('perfAdder').value,
+      colorAdder: document.getElementById('colorAdder').value,
+      interiorAdder: document.getElementById('interiorAdder').value,
+      eapAdder: document.getElementById('eapAdder').value,
+      fsdAdder: document.getElementById('fsdAdder').value,
+      hw4Adder: document.getElementById('hw4Adder').value,
+      atomPenalty: document.getElementById('atomPenalty').value,
+      // UI fields
+      currentKm: document.getElementById('currentKm').value,
+      annualKm: document.getElementById('annualKm').value,
+      trim: document.querySelector('input[name="trim"]:checked')?.value,
+      color_body: document.querySelector('input[name="color_body"]:checked')?.value,
+      color_interior: document.querySelector('input[name="color_interior"]:checked')?.value,
+      ap_pkg: document.querySelector('input[name="ap_pkg"]:checked')?.value,
+      hw_ver: document.querySelector('input[name="hw_ver"]:checked')?.value,
+      mcu_proc: document.querySelector('input[name="mcu_proc"]:checked')?.value,
+      ded_tires: document.getElementById('ded_tires').checked,
+      ded_curbrash: document.getElementById('ded_curbrash').checked,
+      ded_bumper: document.getElementById('ded_bumper').checked,
+      ded_windshield: document.getElementById('ded_windshield').checked,
+      customDeduction: document.getElementById('customDeduction').value
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+  function loadState(){
+    const s=getSettings();
+    // settings fields
+    ['baseKm','basePriceAnchor','perfAdder','colorAdder','interiorAdder','eapAdder','fsdAdder','hw4Adder','atomPenalty'].forEach(id=>{if(document.getElementById(id)) document.getElementById(id).value=s[id];});
+    // UI fields
+    document.getElementById('currentKm').value=s.currentKm;
+    document.getElementById('annualKm').value=s.annualKm;
+    setRadio('trim',s.trim);
+    setRadio('color_body',s.color_body);
+    setRadio('color_interior',s.color_interior);
+    setRadio('ap_pkg',s.ap_pkg);
+    setRadio('hw_ver',s.hw_ver);
+    setRadio('mcu_proc',s.mcu_proc);
+    document.getElementById('ded_tires').checked=s.ded_tires;
+    document.getElementById('ded_curbrash').checked=s.ded_curbrash;
+    document.getElementById('ded_bumper').checked=s.ded_bumper;
+    document.getElementById('ded_windshield').checked=s.ded_windshield;
+    document.getElementById('customDeduction').value=s.customDeduction;
+  }
+  function setRadio(name,val){const el=document.querySelector(`input[name="${name}"][value="${val}"]`); if(el) el.checked=true;}
+  function resetToDefaults(){localStorage.removeItem(STORAGE_KEY); loadState(); calculate();}
+  window.onload=init;
+</script>
+</body>
+</html>

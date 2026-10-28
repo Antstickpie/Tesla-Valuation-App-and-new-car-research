@@ -1,0 +1,80 @@
+<div class="container">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-main">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="title-wrap">
+            <h1>Tesla Model Y</h1>
+            <span class="version-tag">Valuation Engine</span>
+          </div>
+          <p class="subtitle">Compute maximum willing-to-pay price & compare vehicles</p>
+        </div>
+      </div>
+
+      <!-- Compact Baseline Reference Chip -->
+      <div class="baseline-chip" title="Baseline Reference Point">
+        <span class="chip-title">Baseline Reference:</span>
+        <div class="chip-items">
+          <span class="chip-item">160k km</span>
+          <span class="chip-sep">•</span>
+          <span class="chip-item">Long Range</span>
+          <span class="chip-sep">•</span>
+          <span class="chip-item">Pearl White / Black</span>
+          <span class="chip-sep">•</span>
+          <span class="chip-item">HW3 & Ryzen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'calc'"
+        (click)="setTab('calc')"
+      >
+        <span class="tab-emoji">⚡</span>
+        <span class="tab-text">Calculator</span>
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'compare'"
+        (click)="setTab('compare')"
+      >
+        <span class="tab-emoji">📊</span>
+        <span class="tab-text">Compare (Radar)</span>
+        @if (svc.cars().length > 0) {
+          <span class="tab-counter">{{ svc.cars().length }}</span>
+        }
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'settings'"
+        (click)="setTab('settings')"
+      >
+        <span class="tab-emoji">⚙️</span>
+        <span class="tab-text">Settings</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Views -->
+  <main class="main-content">
+    @if (activeTab() === 'calc') {
+      <app-calculator></app-calculator>
+    } @else if (activeTab() === 'compare') {
+      <app-compare></app-compare>
+    } @else if (activeTab() === 'settings') {
+      <app-settings></app-settings>
+    }
+  </main>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+

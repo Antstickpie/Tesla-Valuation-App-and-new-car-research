@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2023 Tesla Model Y Long Range Cherry Red — Master Inspection & Handover Checklist</title>
+<style>
+  :root {
+    --bg: #0b0d13;
+    --card-bg: #151822;
+    --card-hover: #1c2130;
+    --card-border: #262c3e;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --primary: #e11d48;
+    --primary-glow: rgba(225, 29, 72, 0.3);
+    --accent: #38bdf8;
+    --success: #22c55e;
+    --success-bg: rgba(34, 197, 94, 0.12);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.12);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.12);
+    --purple: #a855f7;
+    --purple-bg: rgba(168, 85, 247, 0.12);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 16px;
+    padding-bottom: 90px;
+    line-height: 1.5;
+  }
+  .container { max-width: 820px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, #1b1f2e 0%, #10121a 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  h1 { font-size: 1.35rem; margin: 0 0 8px 0; color: #fff; font-weight: 800; letter-spacing: -0.01em; }
+  .subtitle { font-size: 0.85rem; color: #94a3b8; margin-bottom: 14px; }
+  
+  .vin-card {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .vin-label { font-size: 0.75rem; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .vin-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    outline: none;
+  }
+  .vin-info { font-size: 0.75rem; color: #a5f3fc; margin-top: 4px; }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+  @media (min-width: 580px) {
+    .meta-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .meta-field {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid #262c3e;
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .meta-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+  .meta-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    outline: none;
+    margin-top: 2px;
+    font-family: inherit;
+  }
+
+  .badge-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .badge-red { background: rgba(225, 29, 72, 0.2); color: #fb7185; border: 1px solid rgba(225, 29, 72, 0.4); }
+  .badge-blue { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+  .badge-green { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); }
+  .badge-purple { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
+
+  .progress-card {
+    position: sticky;
+    top: 12px;
+    z-index: 100;
+    background: rgba(21, 24, 34, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+  .progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+  .progress-track { height: 10px; background: #1e2433; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+  .action-bar { display: flex; gap: 8px; margin-top: 10px; }
+  .btn {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .btn-print { background: var(--accent); color: #042f2e; }
+  .btn-reset { background: #334155; color: #cbd5e1; }
+  .btn-export { background: #059669; color: #fff; }
+
+  .section {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 10px;
+  }
+  .section-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: #1e293b;
+    color: #94a3b8;
+  }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .item:hover { background: var(--card-hover); }
+  .item.checked {
+    background: var(--success-bg);
+    border-color: rgba(34, 197, 94, 0.4);
+  }
+  .item.checked .item-title {
+    color: #86efac;
+    text-decoration: line-through;
+  }
+  .checkbox {
+    min-width: 24px;
+    height: 24px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--success);
+  }
+  .item-content { flex: 1; }
+  .item-title { font-weight: 700; font-size: 0.95rem; color: #f1f5f9; }
+  .item-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; line-height: 1.45; }
+  
+  .input-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+  }
+  .input-box {
+    background: #090b10;
+    border: 1px solid #334155;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    width: 130px;
+    font-weight: 600;
+  }
+  .alert-box {
+    background: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #fca5a5;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .warning-box {
+    background: rgba(245, 158, 11, 0.14);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    color: #fde68a;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .success-box {
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    color: #86efac;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .clause-box {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #bae6fd;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    line-height: 1.45;
+  }
+  .notes-area {
+    width: 100%;
+    background: #090b10;
+    border: 1px solid #262c3e;
+    color: #e2e8f0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 48px;
+    font-family: inherit;
+  }
+
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    .progress-card, .action-bar { display: none; }
+    .section { border: 1px solid #ddd; background: #fff; page-break-inside: avoid; }
+    .item { background: #fff; border: 1px solid #eee; }
+    .item.checked { background: #f0fdf4; }
+    .item-title, .section-title { color: #000; }
+    .item-desc { color: #555; }
+    .input-box, .vin-input, .meta-input { border: 1px solid #999; color: #000; background: #fff; }
+    .alert-box, .warning-box, .success-box, .clause-box { border: 1px solid #ccc; color: #000; background: #f9f9f9; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Tesla Model Y Long Range — Master Inspection & Handover Dossier</h1>
+    <div class="subtitle">Giga Berlin Grünheide • Midnight Cherry Red (PR57) • Enhanced Autopilot (EAP)</div>
+    
+    <div class="vin-card">
+      <div class="vin-label">
+        <span>Vehicle Identification Number (VIN)</span>
+        <span id="vin-status">✓ Giga Berlin Verified</span>
+      </div>
+      <input type="text" class="vin-input" id="vin_field" value="XP7YGCEK2PB135498" maxlength="17" oninput="saveMeta()">
+      <div class="vin-info" id="vin_decoded">Plant: Berlin-Grünheide (XP7) • Model Y Dual Motor AWD • MY: 2023 (P) • Serial: 135498</div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-field">
+        <div class="meta-label">Odometer</div>
+        <input type="text" class="meta-input" id="meta_odo" value="62,866 km" oninput="saveMeta()">
+      </div>
+      <div class="meta-field">
+        <div class="meta-label">Agreed Purchase Price</div>
+        <input type="text" class="meta-input" id="meta_price" value="€32,000 Gross" oninput="saveMeta()">
+      </div>
+      <div class="meta-field">
+        <div class="meta-label">Current Munich Plate</div>
+        <input type="text" class="meta-input" id="meta_plate" value="M-N 3785 E" oninput="saveMeta()">
+      </div>
+      <div class="meta-field">
+        <div class="meta-label">Inspection Date</div>
+        <input type="text" class="meta-input" id="meta_date" value="" oninput="saveMeta()">
+      </div>
+    </div>
+
+    <div class="badge-bar">
+      <span class="badge badge-red">Midnight Cherry Red (PR57)</span>
+      <span class="badge badge-blue">Enhanced Autopilot (EAP)</span>
+      <span class="badge badge-green">Aviloo SOH: 92.7% (Delta: 4mV)</span>
+      <span class="badge badge-purple">TÜV / HU: 08/2028 (Fresh 2 Yrs)</span>
+      <span class="badge badge-blue">Giga Berlin (XP7)</span>
+      <span class="badge badge-green">Extra Summer Tires + Roof Rack (€0 Surcharge)</span>
+    </div>
+  </div>
+
+  <div class="progress-card">
+    <div class="progress-header">
+      <span>Inspection & Handover Verification Progress</span>
+      <span id="progress-text" style="color:var(--accent);">0 / 0 (0%)</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-bar"></div>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <button class="btn btn-export" onclick="exportData()">💾 Save Backup JSON</button>
+      <button class="btn btn-reset" onclick="resetChecklist()">🔄 Reset</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: PRE-DEPARTURE PREPARATION & PACK LIST -->
+  <div class="section">
+    <div class="section-title">
+      <span>🎒 Step 1: Pre-Departure Preparation & Pack List (Before Leaving)</span>
+      <span class="section-badge" style="background:#0284c7; color:#fff;">Prepare Now</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_prep_1">
+      <div class="item-content">
+        <div class="item-title">Raise Daily SEPA Instant & ATM Limits (Deutsche Bank & Revolut)</div>
+        <div class="item-desc">Open Deutsche Bank & Revolut apps: raise daily transfer limit to <strong>at least €32,000</strong>. Set ATM cash withdrawal limit to €7,500 if split payment contingency is needed.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_prep_2">
+      <div class="item-content">
+        <div class="item-title">Pack Official Identification & Cards</div>
+        <div class="item-desc">Passport, German Permanent Residence Permit (Aufenthaltstitel / PR card), Driving License (Führerschein), and physical bank cards (Deutsche Bank & Revolut).</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_prep_3">
+      <div class="item-content">
+        <div class="item-title">Pack Work / Office Laptop & Mobile Hotspot</div>
+        <div class="item-desc">Pack your laptop in case high-value bank transfers require desktop web portal login, photo-TAN, or token authorization.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_prep_4">
+      <div class="item-content">
+        <div class="item-title">Request Insurance eVB-Nummer</div>
+        <div class="item-desc">Get an electronic insurance number (eVB) ready from your car insurer (HUK24, Allianz, DA Direkt, etc.) for the 3-day re-registration window.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_prep_5">
+      <div class="item-content">
+        <div class="item-title">Tesla App Ready & Logged In</div>
+        <div class="item-desc">Verify Tesla smartphone app is logged into your active Tesla account so you can accept the instant ownership transfer on-site without delay.</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_prep" placeholder="Pre-departure notes / banking limit confirmation numbers..."></textarea>
+  </div>
+
+  <!-- PHASE 0: LEGAL PAPERWORK, ACCIDENT-FREE CLAUSE & INSURANCE -->
+  <div class="section">
+    <div class="section-title">
+      <span>📄 Phase 0: Legal Paperwork, Title Chain & Insurance (BEFORE Driving)</span>
+      <span class="section-badge">Critical</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_1">
+      <div class="item-content">
+        <div class="item-title">Zulassungsbescheinigung Teil II (Fahrzeugbrief) ORIGINAL IN HAND</div>
+        <div class="item-desc">Physically verify the original document is on the table. Field C.1.1/C.1.2 must show the seller or the seller's company. Ensure no bank holding/leasing security transfer note (Sicherungsübereignung). Zulassungsstelle CANNOT register without this original!</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_2">
+      <div class="item-content">
+        <div class="item-title">Zulassungsbescheinigung Teil I (Fahrzeugschein) ORIGINAL IN HAND</div>
+        <div class="item-desc">Verify VIN matches <code>XP7YGCEK2PB135498</code> and license plate matches <code>M-N 3785 E</code>. Necessary for driving home today.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_3">
+      <div class="item-content">
+        <div class="item-title">Certificate of Conformity (CoC / EG-Übereinstimmungsbescheinigung)</div>
+        <div class="item-desc">Verify the original multi-page EC Certificate of Conformity from Tesla Giga Berlin. Verifies European type approval, exact wheel/tire combinations (19", 20", 21"), and technical specs.</div>
+        <div class="warning-box"><strong>WHY YOU NEED IT:</strong> While German Zulassungsstelle can register an existing German car using Teil I/II alone, the CoC is crucial if you ever sell to another EU buyer, fit alternative OEM rim sizes without TÜV inspection, or export. Replacement from Tesla costs ~€150–€200.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_4">
+      <div class="item-content">
+        <div class="item-title">Seller Authority & Company Representation (If Dienstwagen)</div>
+        <div class="item-desc">If registered to a company: Verify seller's ID (Personalausweis), verify seller is Managing Director (Geschäftsführer) or carries a signed Power of Attorney (<em>Verkaufsvollmacht</em>) with company stamp.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_5">
+      <div class="item-content">
+        <div class="item-title">CONTRACT: Legally Binding "Unfallfrei" Guarantee in Contract</div>
+        <div class="item-desc">Contract MUST state explicitly: <strong>"Das Fahrzeug ist unfallfrei"</strong> (No repaired or unrepaired accident damage).</div>
+        <div class="alert-box"><strong>CRITICAL LEGAL PROTECTION:</strong> In German law (BGH), "Unfallfreiheit" guarantees no structural or chassis collisions. Differentiate minor cosmetic scuffs: explicitly write in the contract: <em>"Fahrzeug ist unfallfrei. Bekannte Bagatellschäden: Oberflächliche Schramme an hinterer Radlaufblende/Stoßfängerecke links sowie Bordsteinkratzer an den Felgen."</em> Do NOT allow phrases like "gekauft wie gesehen" or "Unfallschäden unbekannt"!</div>
+        <div class="clause-box">Musterklausel: "Der Verkäufer garantiert, dass das Fahrzeug, solange es in seinem Besitz war, und nach seiner Kenntnis auch zuvor, unfallfrei ist und keine gravierenden Rahmenschäden erlitten hat."</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_6">
+      <div class="item-content">
+        <div class="item-title">INSURANCE: Ensure Seller Has Active Vollkasko (Driving Home on M-Plates)</div>
+        <div class="item-desc">Confirm the car has active <strong>Vollkaskoversicherung</strong> and that third-party drivers are permitted. Fill out the official <em>Veräußerungsanzeige</em> with exact handover timestamp (date & minute).</div>
+        <div class="alert-box"><strong>TRANSIT ON SELLER'S PLATES:</strong> In Germany, the seller's insurance legally remains active for the buyer's transit ride home (§ 95 VVG). However, if an at-fault accident occurs, you need Vollkasko to cover own vehicle damage. Both parties must sign the handover note with the EXACT minute (e.g., 16:30 Uhr). Buyer commits to re-register within 3 business days.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_0_7">
+      <div class="item-content">
+        <div class="item-title">Original TÜV Prüfbericht (08/2026, valid to 08/2028) & Aviloo / Suspension Tests</div>
+        <div class="item-desc">Physically verify the paper TÜV report (valid until August 2028), Aviloo Battery Diagnostic Sheet (92.7% SOH, 4mV Delta V), and the Eurosystem Suspension/Brake Report (0% damping diff, 68% braking).</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_0" placeholder="Phase 0 Notes / Document remarks / Seller ID details..."></textarea>
+  </div>
+
+  <!-- PHASE 1: ACCIDENT-FREE FORENSIC PHYSICAL INSPECTION -->
+  <div class="section">
+    <div class="section-title">
+      <span>🔍 Phase 1: Accident-Free Physical Verification & Body Shell Audit</span>
+      <span class="section-badge">Accident Check</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_1_1">
+      <div class="item-content">
+        <div class="item-title">Paint Thickness Gauge Check (Schichtdickenmessung)</div>
+        <div class="item-desc">Check paint depth on Hood, Front Fenders, Doors, Quarter Panels, Roof Cant Rails, and Rear Hatch. Factory Berlin Midnight Cherry Red is 95–135 µm. >180 µm = Repaint; >300 µm = Body filler (Spachtel).</div>
+        <div class="input-row">
+          <span>Measured Paint Thickness (µm):</span>
+          <input type="text" class="input-box" id="val_paint" placeholder="e.g. 115 µm" oninput="saveMeta()">
+          <span style="font-size:0.75rem; color:#94a3b8;">(Factory: 95-135 µm)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_1_2">
+      <div class="item-content">
+        <div class="item-title">Front Cast Aluminum Mega-Casting Shock Towers (Under Frunk Cowl)</div>
+        <div class="item-desc">Pop plastic side covers under frunk lid. Inspect cast aluminum suspension towers. Look for factory gray/blue structural adhesive beads. Zero hairline cracks, welding bead repairs, or stress fractures.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_1_3">
+      <div class="item-content">
+        <div class="item-title">Lower Frame Rails & Battery Pinch Welds (Richtsatz-Spuren)</div>
+        <div class="item-desc">Check underside pinch welds and longitudinal frame members. Ensure zero serrated clamp teeth marks from an accident straightening bench (Richtsatz). Zero crushed battery case flanges.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_1_4">
+      <div class="item-content">
+        <div class="item-title">Trunk Floor Gutter & Rear Megacasting Inspection</div>
+        <div class="item-desc">Lift the rear lower trunk sub-floor tub. Inspect the inner body tub and rear casting. Verify original robot sealant beads (Raupen). Zero buckling, wavy sheet metal, or overspray.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_1_5">
+      <div class="item-content">
+        <div class="item-title">Panel Gaps & Hinge Bolt Factory Paint Verification</div>
+        <div class="item-desc">Inspect hood, tailgate, and door hinge bolts. Bolts must have pristine factory paint with zero socket-wrench bite marks. Panel gaps must be symmetrical left-to-right (3.5–4.5 mm).</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_1_6">
+      <div class="item-content">
+        <div class="item-title">Left Rear Wheel Arch & Bumper Scuff Verification (Photo 13)</div>
+        <div class="item-desc">Confirm this damage is purely superficial plastic arch moulding scrape + corner paint scratch. Reach behind wheel arch liner: confirm inner metal fender lip and plastic mounting brackets are intact and unbent.</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_1" placeholder="Phase 1 Notes / Paint depth readings / Casting observations..."></textarea>
+  </div>
+
+  <!-- PHASE 2: WHEELS, TIRES, SUSPENSION & BRAKES -->
+  <div class="section">
+    <div class="section-title">
+      <span>🛞 Phase 2: Wheels, Tires, Extra Summer Set & Chassis</span>
+      <span class="section-badge">Hardware</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_2_1">
+      <div class="item-content">
+        <div class="item-title">Mounted All-Season Tires: Brand, Tread & Alpine Symbol Check</div>
+        <div class="item-desc">Listing states Conti, photos show Goodyear Vector 4Seasons Gen-3 SUV (255/45 R19). Verify all 4 match, check 3PMSF Alpine mountain-snowflake symbol, and measure tread depth (minimum 4.0 mm for safe winter).</div>
+        <div class="input-row">
+          <span>FL Tread:</span><input type="text" class="input-box" style="width:75px;" id="val_tread_fl" placeholder="mm" oninput="saveMeta()">
+          <span>FR Tread:</span><input type="text" class="input-box" style="width:75px;" id="val_tread_fr" placeholder="mm" oninput="saveMeta()">
+          <span>RL Tread:</span><input type="text" class="input-box" style="width:75px;" id="val_tread_rl" placeholder="mm" oninput="saveMeta()">
+          <span>RR Tread:</span><input type="text" class="input-box" style="width:75px;" id="val_tread_rr" placeholder="mm" oninput="saveMeta()">
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_2_2">
+      <div class="item-content">
+        <div class="item-title">EXTRA SUMMER TIRE SET Handover & Condition Audit</div>
+        <div class="item-desc">Physically verify all 4 extra summer tires are present, loaded, and included without any surcharge. Check brand, DOT production year, and tread depth across all 4. Confirm zero puncture repairs or sidewall bulging.</div>
+        <div class="success-box"><strong>AGREED:</strong> Extra summer tire set is included in the €32,000 purchase price without extra charge.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_2_3">
+      <div class="item-content">
+        <div class="item-title">Gemini 19" Rims: Curb Rash & Inner Barrel Check</div>
+        <div class="item-desc">Inspect all 4 outer rim lips for curb scrapes (Photos 14/15). Reach behind each wheel to feel the inner rim barrel for cracks or pothole denting.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_2_4">
+      <div class="item-content">
+        <div class="item-title">Corroborate Eurosystem Suspension & Brake Test (26.10.2026)</div>
+        <div class="item-desc">Eurosystem test confirmed 0.30 D damping on both axles (0% difference) and 68% braking efficiency (3.33 kN / 3.11 kN front, 3.58 kN / 3.68 kN rear). Verify brake discs are not heavily grooved or rusted.</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_2" placeholder="Phase 2 Notes / Extra summer tire DOT & tread readings..."></textarea>
+  </div>
+
+  <!-- PHASE 3: SOFTWARE SCREEN, EAP & BATTERY -->
+  <div class="section">
+    <div class="section-title">
+      <span>💻 Phase 3: Tesla Screen, Enhanced Autopilot & Battery Telemetry</span>
+      <span class="section-badge">Tesla Screen</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_3_1">
+      <div class="item-content">
+        <div class="item-title">Screen: Enhanced Autopilot (EAP) Included Package</div>
+        <div class="item-desc">Go to <code>Controls -> Software -> Additional Vehicle Information</code>. Confirm <strong>"Enhanced Autopilot"</strong> is listed as an included package (lifetime vehicle-bound entitlement, not an expiring trial).</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_3_2">
+      <div class="item-content">
+        <div class="item-title">Screen: Infotainment Processor & Autopilot Computer</div>
+        <div class="item-desc">Verify infotainment processor says <strong>"AMD Ryzen"</strong> with 16GB RAM. Check Autopilot Computer type. Check MCU responsiveness and fluid map scrolling.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_3_3">
+      <div class="item-content">
+        <div class="item-title">Screen: Active Tesla Factory Warranty</div>
+        <div class="item-desc">Go to <code>Software -> Warranty</code>: Battery & Drive Unit limited warranty must show active until <strong>May 2031 or 192,000 km</strong>. General Vehicle Warranty valid until May 2027 or 80,000 km.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_3_4">
+      <div class="item-content">
+        <div class="item-title">Aviloo Battery Benchmark & Screen Range Verification</div>
+        <div class="item-desc">Aviloo flash test confirmed <strong>92.7% SOH</strong>, 356.7V pack, and <strong>4 mV cell delta</strong> (superb cell balance). Switch screen display from % to km. Projected 100% rated range should be ~485–495 km.</div>
+        <div class="input-row">
+          <span>Current SoC (%):</span><input type="text" class="input-box" id="val_soc" placeholder="e.g. 75%" oninput="saveMeta()">
+          <span>Display Range (km):</span><input type="text" class="input-box" id="val_range" placeholder="e.g. 368 km" oninput="saveMeta()">
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_3_5">
+      <div class="item-content">
+        <div class="item-title">Tesla Factory Service Mode: Active Alert Log Audit</div>
+        <div class="item-desc">Enter Service Mode (Hold "Model Y" logo in Software menu for 5 seconds -> type "service"). Check <strong>Active Alerts</strong>. Must show NO persistent red/amber warnings for BMS, VCFRONT, Inverter, or Thermal.</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_3" placeholder="Phase 3 Notes / Service mode alerts / Software version..."></textarea>
+  </div>
+
+  <!-- PHASE 4: CABIN, HVAC & ROOF RACK ACCESSORIES -->
+  <div class="section">
+    <div class="section-title">
+      <span>🛋️ Phase 4: Cabin, Heat Pump HVAC & Roof Rack Handover</span>
+      <span class="section-badge">Accessories</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_4_1">
+      <div class="item-content">
+        <div class="item-title">OEM Tesla Roof Rack Handover (€0 Surcharge)</div>
+        <div class="item-desc">Verify OEM bars are mounted safely (check glass clearance and rubber protective pads) or neatly boxed. Verify seller hands over the <strong>special security key and torque wrench tool</strong>.</div>
+        <div class="success-box"><strong>AGREED:</strong> OEM Roof Rack included in the €32,000 purchase price without extra charge.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_4_2">
+      <div class="item-content">
+        <div class="item-title">Heat Pump & 6x Fresh Air Filters Stress Test</div>
+        <div class="item-desc">Seller replaced all 6 air filters in Sept 2026. Set climate to HI (30°C) for 1 min, then LO (16°C). Zero sour/mildew/vinegar odor. Heat pump compressor in frunk must hum smoothly without harsh metallic rattle.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_4_3">
+      <div class="item-content">
+        <div class="item-title">All 5 Seats, Heated Steering Wheel & Seatbelts</div>
+        <div class="item-desc">Turn on all 5 seat heaters + heated wheel. Buckle all 5 seatbelts: verify all turn green on screen. Check vegan leather bolsters for tears.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_4_4">
+      <div class="item-content">
+        <div class="item-title">Floor Mats (All-Weather Rubber + Original Velour)</div>
+        <div class="item-desc">Verify all front, rear, trunk, frunk, and sub-trunk rubber mats are present, plus original cloth mats.</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_4" placeholder="Phase 4 Notes / Cabin & HVAC observations..."></textarea>
+  </div>
+
+  <!-- PHASE 5: DYNAMIC ROAD TEST & SUPERCHARGER -->
+  <div class="section">
+    <div class="section-title">
+      <span>🚗 Phase 5: Dynamic Road Test & Supercharger Handshake</span>
+      <span class="section-badge">Road Test</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_5_1">
+      <div class="item-content">
+        <div class="item-title">WOT Acceleration & Dual Motor Smoothness</div>
+        <div class="item-desc">Perform full throttle sprint. Drivetrain must pull seamlessly with 514 PS. Zero front half-shaft shudder, motor groaning, or vibration under heavy torque.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_5_2">
+      <div class="item-content">
+        <div class="item-title">Autobahn Run (100–140 km/h) & EAP Autonavigate Test</div>
+        <div class="item-desc">Drive at 130 km/h: steering wheel must track laser straight with zero shimmy. Double-tap stalk to engage Autopilot: test automatic lane change on Autobahn.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_5_3">
+      <div class="item-content">
+        <div class="item-title">Suspension & Steering Over Bumps / Lock-to-Lock</div>
+        <div class="item-desc">Drive over manhole covers / cobblestones. Front double-wishbone and ball joints must be quiet. Turn steering full lock left and right: zero creaking or hydraulic groaning.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_5_4">
+      <div class="item-content">
+        <div class="item-title">Supercharger Live Handshake & Charging Handshake</div>
+        <div class="item-desc">Plug into a Supercharger or DC fast charger. Listen for solid mechanical HV contactor "CLACK-CLACK". Verify charge port LED pulses green and charging begins immediately (confirms no Tesla salvage blacklist).</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_5" placeholder="Phase 5 Notes / Drivetrain & Supercharging impressions..."></textarea>
+  </div>
+
+  <!-- PHASE 6: ADVERT EQUIPMENT INVENTORY & PICKUP HANDOVER -->
+  <div class="section">
+    <div class="section-title">
+      <span>📦 Phase 6: Advert Equipment Inventory & Pickup Handover</span>
+      <span class="section-badge" style="background:#e11d48; color:#fff;">Handover Checklist</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_rack">
+      <div class="item-content">
+        <div class="item-title">OEM Tesla Roof Rack (Dachträger) + Security Keys + Tool (€0 Surcharge)</div>
+        <div class="item-desc">
+          Verify complete assembly:
+          <br>• [ ] 2x OEM black aluminum aerodynamic crossbars (mounted or packed)
+          <br>• [ ] 2x physical security keys for locking end-caps
+          <br>• [ ] 1x special Tesla torque wrench / hex tool
+          <br>• [ ] 4x rubber base pads (ensure no contact/stress on panoramic glass roof)
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_tires">
+      <div class="item-content">
+        <div class="item-title">Extra Summer Tire Set Handover (4x Tires/Wheels, €0 Surcharge)</div>
+        <div class="item-desc">
+          Verify 4x extra summer tires loaded in trunk/rear:
+          <br>• [ ] Brand: Hankook Ventus S1 Evo3 EV or Michelin Pilot Sport EV (255/45 R19)
+          <br>• [ ] Tread depth even across all 4 (min 4.5 mm)
+          <br>• [ ] DOT year code (2022/2023)
+          <br>• [ ] Zero sidewall gouges, punctures, or uneven camber wear
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_cables">
+      <div class="item-content">
+        <div class="item-title">Charging Cables & Mobile Connector Kit</div>
+        <div class="item-desc">
+          Verify complete EV charging hardware:
+          <br>• [ ] Tesla Mobile Connector (UMC 230V emergency charging brick)
+          <br>• [ ] Standard household Schuko plug adapter
+          <br>• [ ] Blue Mennekes Type 2 charging cable (3-phase 32A, ~4–7.5m)
+          <br>• [ ] Black Tesla zippered cable storage bag
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_keys">
+      <div class="item-content">
+        <div class="item-title">Exactly 2x Tesla NFC Key Cards</div>
+        <div class="item-desc">
+          Physically test both black Tesla key cards:
+          <br>• [ ] Card 1: Tap driver B-pillar (locks/unlocks) + place behind cup holder (drives)
+          <br>• [ ] Card 2: Tap driver B-pillar (locks/unlocks) + place behind cup holder (drives)
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_mats">
+      <div class="item-content">
+        <div class="item-title">Complete Mat Set (All-Weather Rubber + Original Velour)</div>
+        <div class="item-desc">
+          Verify presence of all advertised mats:
+          <br>• [ ] All-weather rubber floor mats (driver, front passenger, rear full row)
+          <br>• [ ] All-weather trunk cargo mat + sub-trunk liner + frunk mat
+          <br>• [ ] Original factory black velour carpet floor mats
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_maintenance">
+      <div class="item-content">
+        <div class="item-title">Maintenance Items from Advert (09/2026 Refresh)</div>
+        <div class="item-desc">
+          Verify advertised 09/2026 service items:
+          <br>• [ ] 6x fresh air filters (2 HEPA, 2 cabin filters, 2 pre-filters) — odor-free HVAC
+          <br>• [ ] Fresh windshield wipers (smooth wipe, zero streaking/chatter)
+          <br>• [ ] Emergency tow eye bolt (in sub-trunk) + warning triangle + first aid kit
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_contract">
+      <div class="item-content">
+        <div class="item-title">ADAC Kaufvertrag Executed for Exact €32,000 Gross</div>
+        <div class="item-desc">
+          Ensure contract states agreed total purchase price: <strong>€32,000.00 Gross</strong>.
+          <br>• If commercial invoice (19% MwSt): Net <strong>€26,890.76</strong> + 19% MwSt <strong>€5,109.24</strong> = <strong>€32,000.00</strong>.
+          <br>• Extras clause: <em>"Im Kaufpreis von 32.000 € sind ohne Aufpreis enthalten: 1 zusätzlicher Satz Sommerräder/Reifen, original Tesla Dachträger inkl. Montageschlüssel sowie sämtliche Gummimatten."</em>
+          <br>• Accident-free guarantee: <em>"Das Fahrzeug ist unfallfrei. Keine gravierenden Struktur- oder Rahmenschäden."</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_timestamp">
+      <div class="item-content">
+        <div class="item-title">Exact Handover Timestamp on Veräußerungsanzeige Signed</div>
+        <div class="item-desc">Both buyer and seller fill out and sign the insurance & Zulassungsstelle notification with date and exact minute (e.g. 28.10.2026, 16:45 Uhr) for clear liability transfer during the transit drive home on Munich plates.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_payment">
+      <div class="item-content">
+        <div class="item-title">Real-Time Instant SEPA Transfer (€32,000.00) Executed</div>
+        <div class="item-desc">Execute instant payment via Deutsche Bank or Revolut app with pre-raised daily limit. Confirm recipient IBAN matches seller/company name on title. Zero cash needed!</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_6_app">
+      <div class="item-content">
+        <div class="item-title">Tesla App Instant Ownership Transfer (ON SITE)</div>
+        <div class="item-desc">Seller opens Tesla app: <code>Manage Drivers -> Transfer Ownership</code>. Seller enters buyer's Tesla account email. Accept transfer on your smartphone: vehicle immediately links to your account before driving away!</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_6" placeholder="Phase 6 Notes / Handover timestamp / Transaction ID / Notes..."></textarea>
+  </div>
+
+  <!-- STEP 9: POST-PURCHASE NEXT STEPS (DRIVE HOME & UMMELDUNG) -->
+  <div class="section">
+    <div class="section-title">
+      <span>🚗 Step 9: Post-Purchase Next Steps (Drive Home & Ummeldung)</span>
+      <span class="section-badge" style="background:#059669; color:#fff;">Post-Sale</span>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_post_1">
+      <div class="item-content">
+        <div class="item-title">Safely Secure All Original Documents in Bag Before Driving</div>
+        <div class="item-desc">Keep original Teil I, Teil II, CoC, TÜV sheet, both keys, and signed ADAC Kaufvertrag safely in your backpack (do NOT leave them in the glovebox while parked).</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_post_2">
+      <div class="item-content">
+        <div class="item-title">Drive Home on Munich Plates (M-N 3785 E)</div>
+        <div class="item-desc">Drive home safely. Under § 95 VVG and your signed Veräußerungsanzeige with exact handover time, the car is legally authorized for transit.</div>
+      </div>
+    </div>
+
+    <div class="item" onclick="toggleItem(this)">
+      <input type="checkbox" class="checkbox" id="c_post_3">
+      <div class="item-content">
+        <div class="item-title">Re-Register Vehicle (Ummeldung / i-Kfz) Within 3 Business Days</div>
+        <div class="item-desc">Book an appointment at your local Zulassungsstelle or complete online via i-Kfz (with German eID / online Ausweis). Submit eVB-Nummer, Teil I, Teil II, and TÜV certificate. Enjoy 0€ vehicle tax until 2030!</div>
+      </div>
+    </div>
+
+    <textarea class="notes-area" id="notes_post" placeholder="Post-purchase notes / appointment booking reference..."></textarea>
+  </div>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('.checkbox');
+  const textInputs = document.querySelectorAll('.input-box, .meta-input, .vin-input, .notes-area');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const STORAGE_KEY_PREFIX = 'cherry_red_master_';
+
+  function toggleItem(row) {
+    const cb = row.querySelector('.checkbox');
+    if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+      cb.checked = !cb.checked;
+    }
+    syncRowStyle(row, cb.checked);
+    updateProgress();
+  }
+
+  function syncRowStyle(row, isChecked) {
+    if (isChecked) {
+      row.classList.add('checked');
+    } else {
+      row.classList.remove('checked');
+    }
+  }
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    let checked = 0;
+    checkboxes.forEach(cb => {
+      const row = cb.closest('.item');
+      if (cb.checked) {
+        checked++;
+        syncRowStyle(row, true);
+      } else {
+        syncRowStyle(row, false);
+      }
+      localStorage.setItem(STORAGE_KEY_PREFIX + 'chk_' + cb.id, cb.checked ? 'true' : 'false');
+    });
+    const pct = Math.round((checked / total) * 100);
+    progressBar.style.width = pct + '%';
+    progressText.textContent = `${checked} / ${total} (${pct}%)`;
+  }
+
+  function saveMeta() {
+    textInputs.forEach(input => {
+      localStorage.setItem(STORAGE_KEY_PREFIX + 'inp_' + input.id, input.value);
+    });
+    decodeVinLive();
+  }
+
+  function decodeVinLive() {
+    const vin = document.getElementById('vin_field').value.trim().toUpperCase();
+    const info = document.getElementById('vin_decoded');
+    const status = document.getElementById('vin-status');
+    if (vin.startsWith('XP7')) {
+      info.textContent = 'Plant: Berlin-Grünheide (XP7) • Model Y Long Range AWD • MY: 2023 (P)';
+      status.textContent = '✓ Giga Berlin Verified';
+      status.style.color = '#86efac';
+    } else if (vin.startsWith('LRW')) {
+      info.textContent = 'Plant: Giga Shanghai (LRW) • Model Y';
+      status.textContent = 'China Build (LRW)';
+      status.style.color = '#7dd3fc';
+    } else if (vin.startsWith('5YJ')) {
+      info.textContent = 'Plant: Fremont, USA (5YJ) • Model Y';
+      status.textContent = 'US Build (5YJ)';
+      status.style.color = '#fde047';
+    } else {
+      info.textContent = 'Custom VIN: ' + vin;
+      status.textContent = 'Custom VIN';
+    }
+  }
+
+  function loadSaved() {
+    // Set default date if empty
+    const dateInput = document.getElementById('meta_date');
+    if (!localStorage.getItem(STORAGE_KEY_PREFIX + 'inp_meta_date')) {
+      const today = new Date().toLocaleDateString('de-DE');
+      dateInput.value = today;
+    }
+
+    checkboxes.forEach(cb => {
+      const saved = localStorage.getItem(STORAGE_KEY_PREFIX + 'chk_' + cb.id);
+      if (saved === 'true') {
+        cb.checked = true;
+        syncRowStyle(cb.closest('.item'), true);
+      }
+      cb.addEventListener('change', updateProgress);
+    });
+
+    textInputs.forEach(input => {
+      const saved = localStorage.getItem(STORAGE_KEY_PREFIX + 'inp_' + input.id);
+      if (saved !== null) input.value = saved;
+      input.addEventListener('input', saveMeta);
+    });
+
+    decodeVinLive();
+    updateProgress();
+  }
+
+  function exportData() {
+    const reportData = {
+      vehicle: "2023 Tesla Model Y LR Midnight Cherry Red",
+      vin: document.getElementById('vin_field').value,
+      odometer: document.getElementById('meta_odo').value,
+      price: document.getElementById('meta_price').value,
+      plate: document.getElementById('meta_plate').value,
+      date: document.getElementById('meta_date').value,
+      progress: progressText.textContent,
+      checks: {},
+      measurements: {
+        paint_um: document.getElementById('val_paint')?.value || '',
+        tread_fl: document.getElementById('val_tread_fl')?.value || '',
+        tread_fr: document.getElementById('val_tread_fr')?.value || '',
+        tread_rl: document.getElementById('val_tread_rl')?.value || '',
+        tread_rr: document.getElementById('val_tread_rr')?.value || '',
+        soc_pct: document.getElementById('val_soc')?.value || '',
+        range_km: document.getElementById('val_range')?.value || ''
+      },
+      notes: {
+        prep: document.getElementById('notes_prep')?.value || '',
+        phase0: document.getElementById('notes_0')?.value || '',
+        phase1: document.getElementById('notes_1')?.value || '',
+        phase2: document.getElementById('notes_2')?.value || '',
+        phase3: document.getElementById('notes_3')?.value || '',
+        phase4: document.getElementById('notes_4')?.value || '',
+        phase5: document.getElementById('notes_5')?.value || '',
+        phase6: document.getElementById('notes_6')?.value || '',
+        post: document.getElementById('notes_post')?.value || ''
+      }
+    };
+    checkboxes.forEach(cb => {
+      const label = cb.closest('.item').querySelector('.item-title').textContent.trim();
+      reportData.checks[cb.id] = { label: label, passed: cb.checked };
+    });
+
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Tesla_CherryRed_Inspection_${reportData.vin}_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function resetChecklist() {
+    if (confirm('Clear all verification checkmarks, measurements, and inspection notes?')) {
+      checkboxes.forEach(cb => {
+        localStorage.removeItem(STORAGE_KEY_PREFIX + 'chk_' + cb.id);
+        cb.checked = false;
+        syncRowStyle(cb.closest('.item'), false);
+      });
+      textInputs.forEach(input => {
+        localStorage.removeItem(STORAGE_KEY_PREFIX + 'inp_' + input.id);
+        if (input.id === 'vin_field') input.value = 'XP7YGCEK2PB135498';
+        else if (input.id === 'meta_odo') input.value = '62,866 km';
+        else if (input.id === 'meta_price') input.value = '€32,000 Gross';
+        else if (input.id === 'meta_plate') input.value = 'M-N 3785 E';
+        else input.value = '';
+      });
+      updateProgress();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadSaved);
+</script>
+
+</body>
+</html>

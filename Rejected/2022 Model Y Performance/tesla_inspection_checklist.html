@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tesla Model Y Performance — Master Pre-Purchase Inspection</title>
+<style>
+  :root {
+    --bg: #0b0d13;
+    --card-bg: #151822;
+    --card-hover: #1c2130;
+    --card-border: #262c3e;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --primary: #e11d48;
+    --primary-glow: rgba(225, 29, 72, 0.3);
+    --accent: #38bdf8;
+    --success: #22c55e;
+    --success-bg: rgba(34, 197, 94, 0.12);
+    --warning: #f59e0b;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 16px;
+    padding-bottom: 90px;
+    line-height: 1.5;
+  }
+  .header {
+    background: linear-gradient(135deg, #1b1f2e 0%, #10121a 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  h1 { font-size: 1.35rem; margin: 0 0 12px 0; color: #fff; font-weight: 700; letter-spacing: -0.01em; }
+  
+  .vin-card {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .vin-label { font-size: 0.75rem; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .vin-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    outline: none;
+  }
+  .vin-info { font-size: 0.75rem; color: #a5f3fc; margin-top: 4px; }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .meta-field {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid #262c3e;
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .meta-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+  .meta-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    outline: none;
+    margin-top: 2px;
+  }
+
+  .badge-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-weight: 600;
+  }
+  .badge-red { background: rgba(225, 29, 72, 0.2); color: #fb7185; border: 1px solid rgba(225, 29, 72, 0.4); }
+  .badge-blue { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+  .badge-green { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); }
+
+  .progress-card {
+    position: sticky;
+    top: 12px;
+    z-index: 100;
+    background: rgba(21, 24, 34, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+  .progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+  .progress-track { height: 10px; background: #1e2433; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s ease; }
+
+  .action-bar { display: flex; gap: 8px; margin-top: 10px; }
+  .btn {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .btn-print { background: var(--accent); color: #042f2e; }
+  .btn-reset { background: #334155; color: #cbd5e1; }
+  .btn-export { background: #059669; color: #fff; }
+
+  .section {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 10px;
+  }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .item:hover { background: var(--card-hover); }
+  .item.checked {
+    background: var(--success-bg);
+    border-color: rgba(34, 197, 94, 0.4);
+  }
+  .item.checked .item-title {
+    color: #86efac;
+  }
+  .checkbox {
+    min-width: 26px;
+    height: 26px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--success);
+  }
+  .item-content { flex: 1; }
+  .item-title { font-weight: 600; font-size: 0.95rem; color: #f1f5f9; }
+  .item-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  
+  .input-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+  }
+  .input-box {
+    background: #090b10;
+    border: 1px solid #334155;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    width: 120px;
+    font-weight: 600;
+  }
+  .alert-box {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .notes-area {
+    width: 100%;
+    background: #090b10;
+    border: 1px solid #262c3e;
+    color: #e2e8f0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    resize: vertical;
+    min-height: 40px;
+    font-family: inherit;
+  }
+
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    .progress-card, .action-bar { display: none; }
+    .section { border: 1px solid #ddd; background: #fff; page-break-inside: avoid; }
+    .item { background: #fff; border: 1px solid #eee; }
+    .item.checked { background: #f0fdf4; }
+    .item-title, .section-title { color: #000; }
+    .item-desc { color: #555; }
+    .input-box, .vin-input, .meta-input { border: 1px solid #999; color: #000; background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Tesla Model Y Performance — Master Pre-Purchase Inspection</h1>
+  
+  <div class="vin-card">
+    <div class="vin-label">
+      <span>Vehicle Identification Number (VIN)</span>
+      <span id="vin-status">✓ Giga Berlin Verified</span>
+    </div>
+    <input type="text" class="vin-input" id="vin_field" value="XP7YGCEL8NB005683" maxlength="17" oninput="saveMeta()">
+    <div class="vin-info" id="vin_decoded">Plant: Berlin-Grünheide (XP7) • Trim: Performance Dual Motor (YGC) • MY: 2022 (N)</div>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-field">
+      <div class="meta-label">Current Odometer</div>
+      <input type="text" class="meta-input" id="meta_odo" value="158,122 km" oninput="saveMeta()">
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Agreed Target Price</div>
+      <input type="text" class="meta-input" id="meta_price" value="€26,500" oninput="saveMeta()">
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Inspection Date</div>
+      <input type="text" class="meta-input" id="meta_date" value="" oninput="saveMeta()">
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Inspector / Mechanic</div>
+      <input type="text" class="meta-input" id="meta_inspector" value="Buyer Inspection" oninput="saveMeta()">
+    </div>
+  </div>
+
+  <div class="badge-bar">
+    <span class="badge badge-red">LG 5L (82 gross / 79 net kWh)</span>
+    <span class="badge badge-blue">Homologation: Y5LD / P2P4s5T3</span>
+    <span class="badge badge-green">Tesla Warranty: 25 May 2030 / 192k km</span>
+    <span class="badge badge-blue">German TÜV: 10/2028</span>
+  </div>
+</div>
+
+<div class="progress-card">
+  <div class="progress-header">
+    <span>Inspection Progress</span>
+    <span id="progress-text">0 / 0 (0%)</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-bar"></div>
+  </div>
+  <div class="action-bar">
+    <button class="btn btn-print" onclick="window.print()">🖨️ Print / PDF</button>
+    <button class="btn btn-export" onclick="exportData()">💾 Save Backup</button>
+    <button class="btn btn-reset" onclick="resetChecklist()">🔄 Reset</button>
+  </div>
+</div>
+
+<!-- PHASE 0: LEGAL PAPERWORK -->
+<div class="section">
+  <div class="section-title">📄 Phase 0: Legal Paperwork & Title Chain (BEFORE Driving)</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_0_1">
+    <div class="item-content">
+      <div class="item-title">Belgian Registration Certificate (BOTH Part 1 AND Part 2)</div>
+      <div class="item-desc">Physically verify both parts matching plate <code>2GFD962</code>. German Zulassungsstelle CANNOT register without Part 2!</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_0_2">
+    <div class="item-content">
+      <div class="item-title">Chain of Title Invoice (Facture d'achat)</div>
+      <div class="item-desc">Invoice/contract showing how the French seller/company acquired the car from Belgium (bridges the ownership gap).</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_0_3">
+    <div class="item-content">
+      <div class="item-title">Original Certificate of Conformity (CoC)</div>
+      <div class="item-desc">Tesla EC CoC issued Fremont 18 May 2022 (Variant Y5LD, Version P2P4s5T3).</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_0_4">
+    <div class="item-content">
+      <div class="item-title">Original German GTÜ TÜV Report (from 12.10.2026)</div>
+      <div class="item-desc">Prüfbericht Nr. DL6S02454 showing "Ohne festgestellte Mängel", valid until 10/2028.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_0_5">
+    <div class="item-content">
+      <div class="item-title">Belgian Car-Pass Verification</div>
+      <div class="item-desc">Odometer verified from 13k to 92k km without gaps or accident repair flags.</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_0" placeholder="Phase 0 Notes / Document remarks..."></textarea>
+</div>
+
+<!-- PHASE 1: MODS & TIRE ALERT -->
+<div class="section">
+  <div class="section-title">⚠️ Phase 1: Modifications & Tire Legality</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_1_1">
+    <div class="item-content">
+      <div class="item-title">Tire Sidewall: 3PMSF Alpine Snowflake Check (NOT A WINTER TIRE!)</div>
+      <div class="item-desc">The RapidDragon tires only have M+S. Verify absence of 3PMSF (mountain + snowflake).</div>
+      <div class="alert-box"><strong>GERMAN LAW (§ 36 StVZO):</strong> M+S without 3PMSF are legally classified as SUMMER TIRES. Cannot drive in winter conditions (€60–€80 fine + 1 point). Use this for €600–€1,000 price discount!</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_1_2">
+    <div class="item-content">
+      <div class="item-title">Eagle-Eye LED Taillights E-Marking Check</div>
+      <div class="item-desc">Inspect outer lens with flashlight for molded circle (E4 / E11 / E24) + lighting codes (2a, R, S1). If missing, ask for OEM taillights.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_1_3">
+    <div class="item-content">
+      <div class="item-title">IKON Rear Diffuser Rigidity & Mounts</div>
+      <div class="item-desc">Ensure diffuser is firmly bolted to subframe/bumper and has no sharp hazard edges (§ 30c StVZO).</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_1" placeholder="Phase 1 Notes / E-marks observed..."></textarea>
+</div>
+
+<!-- PHASE 2: CRASH, CASTINGS, FLOOD, HAIL -->
+<div class="section">
+  <div class="section-title">🔍 Phase 2: Structural Crash, Giga-Castings, Flood & Hail</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_2_1">
+    <div class="item-content">
+      <div class="item-title">Front Cast Aluminum Shock Towers (Under Frunk Covers)</div>
+      <div class="item-desc">Pop side cowl covers. Inspect casting texture and blue/gray structural glue. Zero hairline cracks or weld repairs.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_2_2">
+    <div class="item-content">
+      <div class="item-title">Frame Clamp Marks Check (Richtsatz-Spuren)</div>
+      <div class="item-desc">Check lower frame rails and battery pinch welds for serrated clamp teeth marks from an alignment bench.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_2_3">
+    <div class="item-content">
+      <div class="item-title">Cracks Behind the Wheels (Knuckles & Uprights)</div>
+      <div class="item-desc">Turn steering full lock left and right. Inspect the forged aluminum steering knuckle neck and caliper ears for stress fractures.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_2_4">
+    <div class="item-content">
+      <div class="item-title">Flood Damage: "Seatbelt Deep Pull" & Silt Check</div>
+      <div class="item-desc">Pull seatbelts all the way to mechanical stop—check last 30cm for tide marks. Check sub-trunk floor tub for dried silt lines.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_2_5">
+    <div class="item-content">
+      <div class="item-title">Hail Damage & Slanted Line Reflection Test</div>
+      <div class="item-desc">Crouch at corners and sight down hood and roof cant rails against a straight roofline. Zero waves or glue-pull ripples.</div>
+      <div class="input-row">
+        <span>Paint Thickness (µm):</span>
+        <input type="text" class="input-box" id="val_paint" placeholder="e.g. 115 µm" oninput="saveMeta()">
+        <span style="font-size:0.75rem; color:#94a3b8;">(95-130 = OEM, >200 = filler)</span>
+      </div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_2" placeholder="Phase 2 Notes / Casting & paint observations..."></textarea>
+</div>
+
+<!-- PHASE 3: SCAN MY TESLA / OBD -->
+<div class="section">
+  <div class="section-title">⚡ Phase 3: Diagnostic CAN-Bus (Scan My Tesla / S3XY)</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_3_1">
+    <div class="item-content">
+      <div class="item-title">High-Voltage Pack Nominal Full Pack (LG 5L)</div>
+      <div class="item-desc">New: ~78.8 kWh. Target at 89% SoH: <strong>~69.5 – 70.8 kWh</strong>. Buffer: ~3.3–3.5 kWh.</div>
+      <div class="input-row">
+        <span>Nominal Full Pack:</span>
+        <input type="text" class="input-box" id="val_nfp" placeholder="e.g. 70.1 kWh" oninput="saveMeta()">
+      </div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_3_2">
+    <div class="item-content">
+      <div class="item-title">Cell Voltage Imbalance (Delta V)</div>
+      <div class="item-desc">At rest: <strong>&lt; 10 mV</strong> (ideal 3–6 mV). Under WOT Launch: Must stay <strong>&lt; 45 mV</strong>.</div>
+      <div class="input-row">
+        <span>Rest Delta V:</span>
+        <input type="text" class="input-box" id="val_dv_rest" placeholder="e.g. 4 mV" oninput="saveMeta()">
+        <span>WOT Delta V:</span>
+        <input type="text" class="input-box" id="val_dv_wot" placeholder="e.g. 32 mV" oninput="saveMeta()">
+      </div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_3_3">
+    <div class="item-content">
+      <div class="item-title">HV Isolation Resistance & Charge Ratio</div>
+      <div class="item-desc">Isolation must be &gt; 500 kΩ. Check AC Charge Total vs. DC Fast Charge Total.</div>
+      <div class="input-row">
+        <span>Isolation:</span>
+        <input type="text" class="input-box" id="val_iso" placeholder="e.g. 3200 kΩ" oninput="saveMeta()">
+        <span>DC %:</span>
+        <input type="text" class="input-box" id="val_dc" placeholder="e.g. 35%" oninput="saveMeta()">
+      </div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_3" placeholder="Phase 3 Notes / SMT telemetry log..."></textarea>
+</div>
+
+<!-- PHASE 4: TESLA SERVICE MODE -->
+<div class="section">
+  <div class="section-title">🛠️ Phase 4: Tesla Factory Service Mode (Onscreen)</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_4_1">
+    <div class="item-content">
+      <div class="item-title">Alert Log (Active & Historical)</div>
+      <div class="item-desc">Must be free of active red/yellow faults (BMS_a, DIR_a, DIF_a, THC_a, VCFRONT_a).</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_4_2">
+    <div class="item-content">
+      <div class="item-title">Thermal System Octovalve Auto-Test</div>
+      <div class="item-desc">Run test in Thermal menu. Verify all 8 Octovalve positions actuate smoothly.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_4_3">
+    <div class="item-content">
+      <div class="item-title">TPMS BLE Sensor Readout</div>
+      <div class="item-desc">Verify sensor IDs and check if cluster warning was solely low tire pressure.</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_4" placeholder="Phase 4 Notes / Service alerts found..."></textarea>
+</div>
+
+<!-- PHASE 5: STATIC MICRO-DEFECT & COSMETIC AUDIT -->
+<div class="section">
+  <div class="section-title">🎨 Phase 5: Static Micro-Defect & Cosmetic Audit</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_5_1">
+    <div class="item-content">
+      <div class="item-title">Tailgate & The "White Showing" (Compound Residue Check)</div>
+      <div class="item-desc">Factory black paint on hinge bolts = Original tailgate. Rub white line with fingernail (buffing compound vs PPF).</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_5_2">
+    <div class="item-content">
+      <div class="item-title">Inner Rim Barrel & Curb Rash Check</div>
+      <div class="item-desc">Feel inner metal lip of all 4 rims for pothole cracks. Verify front-right curb rash touch-up (02:48).</div>
+      <div class="input-row">
+        <span>Tread Depth (mm):</span>
+        <input type="text" class="input-box" id="val_tread" placeholder="e.g. 4.8 mm" oninput="saveMeta()">
+      </div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_5_3">
+    <div class="item-content">
+      <div class="item-title">Battery Undertray & Jack Lift Points</div>
+      <div class="item-desc">Inspect aluminum bottom plate for punctures/gouges. Check 4 perimeter jack holes for bending.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_5_4">
+    <div class="item-content">
+      <div class="item-title">Forward Camera Windshield Glass & PPF Cuts</div>
+      <div class="item-desc">Shine light into top triple-camera housing. Check clearcoat edges for installer razor cuts.</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_5" placeholder="Phase 5 Notes / Cosmetic flaws noted..."></textarea>
+</div>
+
+<!-- PHASE 6: CABIN, SEATS, HVAC -->
+<div class="section">
+  <div class="section-title">🛋️ Phase 6: Cabin, All 5 Seats & HVAC Stress Test</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_6_1">
+    <div class="item-content">
+      <div class="item-title">Sit in All 5 Seats & Check Seatbelts</div>
+      <div class="item-desc">Sit in every seat. Pull belts for inertial lock. Buckle all 5: verify all turn green on screen.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_6_2">
+    <div class="item-content">
+      <div class="item-title">All 5 Seat Heaters & Heated Steering Wheel</div>
+      <div class="item-desc">Set all 5 seats to Level 3. Verify cushions warm up within 90s. Verify heated wheel rim.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_6_3">
+    <div class="item-content">
+      <div class="item-title">Bioweapon Defense Mode & Air Filter Check</div>
+      <div class="item-desc">Activate biohazard mode. Fan must reach max CFM. Zero vinegar/mildew odor (check frunk HEPA & 2 cabin filters).</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_6_4">
+    <div class="item-content">
+      <div class="item-title">Dual-Temp Heat Pump Extreme Test</div>
+      <div class="item-desc">HI (30°C) must blow hot within 45s. LO (16°C) must blow ice cold within 30s.</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_6" placeholder="Phase 6 Notes / Interior & HVAC performance..."></textarea>
+</div>
+
+<!-- PHASE 7: ROAD TEST & SUPERCHARGER -->
+<div class="section">
+  <div class="section-title">🚗 Phase 7: Road Test & Supercharger Handshake</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_7_1">
+    <div class="item-content">
+      <div class="item-title">0–100 km/h WOT Launch (Sport Mode)</div>
+      <div class="item-desc">Full throttle launch. SMT peak power ~380–393 kW. Zero half-shaft shudder or front motor clunking.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_7_2">
+    <div class="item-content">
+      <div class="item-title">Full-Lock Parking Lot Figure-8</div>
+      <div class="item-desc">Crawl in tight circles left and right. Zero CV joint clicking or strut top mount binding.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_7_3">
+    <div class="item-content">
+      <div class="item-title">Live Supercharger Handshake (MANDATORY)</div>
+      <div class="item-desc">Plug into V3/V4 stall. Listen for loud contactor "CLACK-CLACK". LED turns flashing green (proves car is NOT blacklisted/salvaged).</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_7" placeholder="Phase 7 Notes / Drivetrain & Supercharging..."></textarea>
+</div>
+
+<!-- PHASE 8: HANDOVER & PAYMENT -->
+<div class="section">
+  <div class="section-title">🤝 Phase 8: App Transfer & Secure Payment</div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_8_1">
+    <div class="item-content">
+      <div class="item-title">Tesla App Instant Ownership Transfer (ON-SITE)</div>
+      <div class="item-desc">Seller taps Settings ➔ Manage Vehicle ➔ Transfer Ownership ➔ Your email. Car MUST appear on your phone before payment!</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_8_2">
+    <div class="item-content">
+      <div class="item-title">Hardware Handover (Keys & Cables)</div>
+      <div class="item-desc">Exactly 2 Key Cards, Tesla UMC 230V home charger bag, blue Type-2 cable, screw-in tow eye bolt.</div>
+    </div>
+  </div>
+  <div class="item" onclick="toggleItem(this)">
+    <input type="checkbox" class="checkbox" id="c_8_3">
+    <div class="item-content">
+      <div class="item-title">Sales Contract (Kaufvertrag) & SEPA Payment</div>
+      <div class="item-desc">Contract specifies €26,500, accident-free, free of liens/finance. Execute SEPA Instant bank transfer.</div>
+    </div>
+  </div>
+  <textarea class="notes-area" id="notes_8" placeholder="Phase 8 Notes / Final transfer notes..."></textarea>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('.checkbox');
+  const textInputs = document.querySelectorAll('.input-box, .meta-input, .vin-input, .notes-area');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+
+  function toggleItem(row) {
+    const cb = row.querySelector('.checkbox');
+    // If click didn't come directly from checkbox or input box
+    if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+      cb.checked = !cb.checked;
+    }
+    syncRowStyle(row, cb.checked);
+    updateProgress();
+  }
+
+  function syncRowStyle(row, isChecked) {
+    if (isChecked) {
+      row.classList.add('checked');
+    } else {
+      row.classList.remove('checked');
+    }
+  }
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    let checked = 0;
+    checkboxes.forEach(cb => {
+      const row = cb.closest('.item');
+      if (cb.checked) {
+        checked++;
+        syncRowStyle(row, true);
+      } else {
+        syncRowStyle(row, false);
+      }
+      localStorage.setItem('chk_' + cb.id, cb.checked ? 'true' : 'false');
+    });
+    const pct = Math.round((checked / total) * 100);
+    progressBar.style.width = pct + '%';
+    progressText.textContent = `${checked} / ${total} (${pct}%)`;
+  }
+
+  function saveMeta() {
+    textInputs.forEach(input => {
+      localStorage.setItem('inp_' + input.id, input.value);
+    });
+    decodeVinLive();
+  }
+
+  function decodeVinLive() {
+    const vin = document.getElementById('vin_field').value.trim().toUpperCase();
+    const info = document.getElementById('vin_decoded');
+    const status = document.getElementById('vin-status');
+    if (vin.startsWith('XP7')) {
+      info.textContent = 'Plant: Berlin-Grünheide (XP7) • Trim: Performance Dual Motor (YGC) • MY: 2022 (N)';
+      status.textContent = '✓ Giga Berlin Verified';
+      status.style.color = '#86efac';
+    } else if (vin.startsWith('LRW')) {
+      info.textContent = 'Plant: Giga Shanghai (LRW) • Model Y';
+      status.textContent = 'China Build (LRW)';
+      status.style.color = '#7dd3fc';
+    } else if (vin.startsWith('5YJ')) {
+      info.textContent = 'Plant: Fremont, USA (5YJ) • Model Y';
+      status.textContent = 'US Build (5YJ)';
+      status.style.color = '#fde047';
+    } else {
+      info.textContent = 'Custom VIN entered: ' + vin;
+      status.textContent = 'Custom VIN';
+    }
+  }
+
+  function loadSaved() {
+    // Set default date if empty
+    const dateInput = document.getElementById('meta_date');
+    if (!localStorage.getItem('inp_meta_date')) {
+      const today = new Date().toLocaleDateString('en-GB');
+      dateInput.value = today;
+    }
+
+    checkboxes.forEach(cb => {
+      const saved = localStorage.getItem('chk_' + cb.id);
+      if (saved === 'true') {
+        cb.checked = true;
+        syncRowStyle(cb.closest('.item'), true);
+      }
+      cb.addEventListener('change', updateProgress);
+    });
+
+    textInputs.forEach(input => {
+      const saved = localStorage.getItem('inp_' + input.id);
+      if (saved !== null) input.value = saved;
+      input.addEventListener('input', saveMeta);
+    });
+
+    decodeVinLive();
+    updateProgress();
+  }
+
+  function exportData() {
+    const reportData = {
+      vin: document.getElementById('vin_field').value,
+      odometer: document.getElementById('meta_odo').value,
+      price: document.getElementById('meta_price').value,
+      date: document.getElementById('meta_date').value,
+      inspector: document.getElementById('meta_inspector').value,
+      progress: progressText.textContent,
+      checks: {},
+      measurements: {
+        paint: document.getElementById('val_paint').value,
+        nfp_kwh: document.getElementById('val_nfp').value,
+        delta_v_rest: document.getElementById('val_dv_rest').value,
+        delta_v_wot: document.getElementById('val_dv_wot').value,
+        isolation: document.getElementById('val_iso').value,
+        dc_pct: document.getElementById('val_dc').value,
+        tread_mm: document.getElementById('val_tread').value
+      },
+      notes: {
+        phase0: document.getElementById('notes_0').value,
+        phase1: document.getElementById('notes_1').value,
+        phase2: document.getElementById('notes_2').value,
+        phase3: document.getElementById('notes_3').value,
+        phase4: document.getElementById('notes_4').value,
+        phase5: document.getElementById('notes_5').value,
+        phase6: document.getElementById('notes_6').value,
+        phase7: document.getElementById('notes_7').value,
+        phase8: document.getElementById('notes_8').value
+      }
+    };
+    checkboxes.forEach(cb => {
+      const label = cb.closest('.item').querySelector('.item-title').textContent.trim();
+      reportData.checks[cb.id] = { label: label, passed: cb.checked };
+    });
+
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Tesla_Inspection_${reportData.vin}_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function resetChecklist() {
+    if (confirm('Are you sure you want to clear all checkboxes, measurements, and notes?')) {
+      localStorage.clear();
+      checkboxes.forEach(cb => {
+        cb.checked = false;
+        syncRowStyle(cb.closest('.item'), false);
+      });
+      textInputs.forEach(input => {
+        if (input.id === 'vin_field') input.value = 'XP7YGCEL8NB005683';
+        else if (input.id === 'meta_odo') input.value = '158,122 km';
+        else if (input.id === 'meta_price') input.value = '€26,500';
+        else input.value = '';
+      });
+      updateProgress();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadSaved);
+</script>
+
+</body>
+</html>
