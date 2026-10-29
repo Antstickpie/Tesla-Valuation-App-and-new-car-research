@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tesla Model Y - Complete Inspection & Valuation Suite</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding: 1rem 2rem 7.5rem 2rem;
+    }
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+    }
+    h1 { font-size: 1.45rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-primary { background: rgba(56, 189, 248, 0.2); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-success { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
+    
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+    .meta-item {
+      background: rgba(15, 23, 42, 0.6);
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .meta-label { color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.2rem; }
+    .meta-val { font-weight: 600; color: #fff; }
+    .vin-code { font-family: monospace; letter-spacing: 0.05em; color: #38bdf8; }
+
+    /* Tab Navigation */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 0.5rem;
+      z-index: 900;
+      margin-bottom: 1.25rem;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0.4rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      overflow-x: auto;
+    }
+    .nav-tab {
+      flex: 1;
+      min-width: 130px;
+      padding: 0.65rem 0.85rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-tab:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .nav-tab.active {
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3);
+    }
+    .tab-badge {
+      background: rgba(15, 23, 42, 0.8);
+      color: #38bdf8;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .nav-tab.active .tab-badge {
+      background: #0f172a;
+      color: #38bdf8;
+    }
+
+    /* Tab Panes */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card styling */
+    .stage-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+    .stage-header {
+      padding: 0.9rem 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .stage-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fff;
+    }
+    .stage-loc {
+      font-size: 0.75rem;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .checklist { list-style: none; padding: 0.5rem 1.25rem; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-item input[type="checkbox"] {
+      width: 1.3rem;
+      height: 1.3rem;
+      margin-top: 0.15rem;
+      accent-color: #38bdf8;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .item-content { flex: 1; }
+    .item-title { font-weight: 600; font-size: 0.95rem; color: #f1f5f9; }
+    .item-desc { font-size: 0.825rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.45; }
+    .german-hint {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+    .alert-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-left: 0.4rem;
+    }
+    .alert-tag.verify { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .alert-tag.warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    .alert-tag.success { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .alert-tag.danger { background: rgba(239, 68, 68, 0.25); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    .progress-bar-container {
+      background: #334155;
+      height: 8px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 1.25rem 0 0.5rem 0;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Markdown Document Styling */
+    .md-article {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      color: #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+    }
+    .md-article h1 { font-size: 1.6rem; color: #fff; margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem; }
+    .md-article h2 { font-size: 1.3rem; color: #38bdf8; margin: 1.75rem 0 0.75rem 0; }
+    .md-article h3 { font-size: 1.1rem; color: #f1f5f9; margin: 1.25rem 0 0.5rem 0; }
+    .md-article p { margin-bottom: 1rem; line-height: 1.6; color: #cbd5e1; }
+    .md-article ul, .md-article ol { margin: 0 0 1rem 1.5rem; }
+    .md-article li { margin-bottom: 0.35rem; }
+    .md-article hr { border: none; border-top: 1px solid var(--card-border); margin: 2rem 0; }
+    .md-article strong { color: #fff; }
+    .md-article blockquote {
+      background: rgba(56, 189, 248, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1rem;
+    }
+    .md-article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.875rem;
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .md-article th, .md-article td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--card-border);
+      text-align: left;
+    }
+    .md-article th {
+      background: rgba(255, 255, 255, 0.04);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .md-article code {
+      background: rgba(15, 23, 42, 0.8);
+      color: #38bdf8;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+
+    /* Notes Area */
+    .notes-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .notes-textarea {
+      width: 100%;
+      height: 320px;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+    }
+    .notes-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+    .notes-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    /* Fixed Bottom Dock */
+    .bottom-bar-wrapper {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border);
+      padding: 0.75rem 1rem;
+      z-index: 1000;
+      box-shadow: 0 -8px 25px rgba(0,0,0,0.6);
+    }
+    .bottom-bar {
+      max-width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stats { font-size: 0.9rem; font-weight: 600; color: #f8fafc; }
+    .btn {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--accent-hover); color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <span class="badge badge-primary">Tesla Model Y Long Range AWD</span>
+          <span class="badge badge-success" style="margin-left:0.5rem;">Enhanced Autopilot (EAP)</span>
+          <h1 style="margin-top:0.5rem;">Tesla Model Y Buyer's Verification & Inspection Suite</h1>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:1.35rem; font-weight:700; color:#22c55e;">€31,500 Gross</div>
+          <div style="font-size:0.8rem; color:#38bdf8; font-weight:600;">Agreed Price (Saved €1,000!)</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Net: €26,470.59 (incl. 19% VAT)</div>
+        </div>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">VIN (Matches Screen & Papers)</span>
+          <span class="meta-val vin-code">LRWYGCEK2NC421019</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Odometer / Registration</span>
+          <span class="meta-val">46,060 km / 02.09.2022</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">License Plate (Kennzeichen)</span>
+          <span class="meta-val" style="color:#38bdf8; font-family:monospace; font-weight:700;">N-ST 8466 E</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Technical Inspection (DEKRA)</span>
+          <span class="meta-val" style="color:#22c55e;">Valid until October 2027</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Seller & Location</span>
+          <span class="meta-val">Tsalidis Auto / Staudt GmbH, Nuremberg</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- STICKY TAB NAVIGATION -->
+    <div class="nav-tabs-wrapper">
+      <div class="nav-tabs">
+        <button class="nav-tab active" id="tabBtn-checklist" onclick="switchTab('checklist')">
+          📋 Inspection Checklist <span class="tab-badge" id="tabBadgeCount">0/81</span>
+        </button>
+        <button class="nav-tab" id="tabBtn-deepdive" onclick="switchTab('deepdive')">
+          📊 Deep Dive Analysis
+        </button>
+        <button class="nav-tab" id="tabBtn-review" onclick="switchTab('review')">
+          🔍 Forensic Deal Review (9.6/10)
+        </button>
+        <button class="nav-tab" id="tabBtn-upgrades" onclick="switchTab('upgrades')">
+          ⚡ Upgrades & Juniper Retrofit
+        </button>
+        <button class="nav-tab" id="tabBtn-notes" onclick="switchTab('notes')">
+          📝 On-Site Notes
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB PANE 1: CHECKLIST -->
+    <div class="tab-pane active" id="pane-checklist">
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- PRE-DEPARTURE: WHAT TO BRING TOMORROW -->
+    <div class="stage-card" style="border: 1px solid #38bdf8; background: rgba(30, 41, 59, 0.95);">
+      <div class="stage-header" style="background: rgba(56, 189, 248, 0.1);">
+        <div class="stage-title" style="color:#38bdf8;">🎒 What to Bring Tomorrow (Pre-Departure Checklist)</div>
+        <div class="stage-loc" style="background:rgba(56,189,248,0.25); color:#fff; border-color:#38bdf8;">📍 Pack in Bag / Check Before Leaving Home</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="prep_1">
+          <div class="item-content">
+            <div class="item-title">German ID Card (Personalausweis) + AusweisApp2 6-Digit PIN Tested</div>
+            <div class="item-desc">Ensure online eID is activated, AusweisApp2 is installed on your phone, and you know your 6-digit personal PIN (not the 5-digit transport PIN). Test NFC card read on your phone before leaving (remove thick phone cases).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_2">
+          <div class="item-content">
+            <div class="item-title">Bank Instant SEPA Transfer Limit Raised to €32,000</div>
+            <div class="item-desc">Log into your banking app right now to raise your single-transaction limit for <span class="german-hint">Echtzeitüberweisung</span> (Instant SEPA) to €32,000 so wire payment won't be blocked at the dealer's desk.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_3">
+          <div class="item-content">
+            <div class="item-title">Insurance eVB Code Ready for Online Ownership Transfer</div>
+            <div class="item-desc">Obtain the 7-character eVB code from your car insurer explicitly valid for online registration (<span class="german-hint">Umschreibung / Halterwechsel via i-Kfz</span>).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_4">
+          <div class="item-content">
+            <div class="item-title">OBDLink MX+ (or vLinker) + Tesla Model Y CAN Diagnostic Harness</div>
+            <div class="item-desc">Pack your Bluetooth OBD dongle, Tesla center-console blue CAN T-harness adapter, and ensure the Scan My Tesla app is installed on your phone.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_5">
+          <div class="item-content">
+            <div class="item-title">Inspection Tools: Flashlight, Coin, Tread Gauge & Microfiber Towel</div>
+            <div class="item-desc">Pack a strong flashlight (for underbody/megacasting inspection), a flat coin (20-cent or 50-cent to scratch i-Kfz seals gently without tearing paper), tire depth gauge, and clean cloth.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_6">
+          <div class="item-content">
+            <div class="item-title">Digital Payment Method (Credit Card / PayPal) for €30 Portal Fee</div>
+            <div class="item-desc">Have credit card or PayPal ready on your phone to instantly pay the ~€25–€35 municipal registration fee upon submitting the i-Kfz online form.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_7">
+          <div class="item-content">
+            <div class="item-title">Physical License Plates (Kennzeichen) & Plate Mounting Tools</div>
+            <div class="item-desc">Pack your physical stamped license plates (or dealer transfer plates / 5-day Kurzzeitkennzeichen if driving home on new plates). Bring a flathead screwdriver or license plate frame removal clip to open the carriers without snapping the plastic tabs.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="prep_8">
+          <div class="item-content">
+            <div class="item-title">Plastic Trim / Panel Removal Tool (Zierleistenkeil)</div>
+            <div class="item-desc">Pack a non-marring nylon pry tool / panel wedge. Essential for popping off the rear center console lower air vent cover to access the blue diagnostic CAN port without gouging the soft cabin plastics, easing stubborn license plate clips open, and safely checking behind door rubber seals.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 1: DESK & DOCUMENTS -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 1: Documentation & Legal Checks</div>
+        <div class="stage-loc">📍 Dealer Desk / Office</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s1_1">
+          <div class="item-content">
+            <div class="item-title">Inspect Original German Registration Papers (Part 1 & Part 2)</div>
+            <div class="item-desc">Receive original green physical papers: Registration Part 1 (look for <span class="german-hint">Zulassungsbescheinigung Teil I</span> Nr. N-S-1-326/22-00199) and Part 2 (look for <span class="german-hint">Zulassungsbescheinigung Teil II / Fahrzeugbrief</span> Nr. GM553869). Confirm VIN matches <span class="german-hint">LRWYGCEK2NC421019</span>.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s1_2">
+          <div class="item-content">
+            <div class="item-title">Inspect Original DEKRA Technical Inspection Certificate</div>
+            <div class="item-desc">Verify original paper certificate (Report P075202002676 from 21.10.2025 at 32,588 km) showing <span class="german-hint">"Ohne festgestellte Mängel"</span> (Zero Defects Found), valid until October 2027.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s1_3">
+          <div class="item-content">
+            <div class="item-title">Confirm "Accident-Free" Box is Checked on Dealer Contract</div>
+            <div class="item-desc">On the dealer's standard printed purchase contract, verify the box <span class="german-hint">[X] unfallfrei</span> (accident-free) is checked with zero accident or structural damage noted. Legally protects against hidden total-loss/salvage history under German law (§ 434 & § 123 BGB).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s1_4">
+          <div class="item-content">
+            <div class="item-title">Verify Price & Both Wheelsets Recorded on Contract Form</div>
+            <div class="item-desc">Ensure purchase form displays agreed <b>€31,500 Gross</b> (or net €26,470.59 + 19% VAT) and records 8 wheels (<span class="german-hint">8-fach bereift</span>). Because seller is Staudt GmbH, statutory 1-year consumer warranty applies automatically under § 476 BGB.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s1_5">
+          <div class="item-content">
+            <div class="item-title">Receive Both Black Key Cards into Your Hand</div>
+            <div class="item-desc">Confirm dealer hands over 2 factory black NFC key cards. Test that both cards unlock the car against the B-pillar before doing anything else.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s1_6">
+          <div class="item-content">
+            <div class="item-title">Verify License Plate Match on Registration Papers (Teil I)</div>
+            <div class="item-desc">Verify that the license plate on the car (<span class="german-hint">N-ST 8466 E</span>) matches field (A) on <span class="german-hint">Zulassungsbescheinigung Teil I</span>, and confirm whether the vehicle is currently registered (<span class="german-hint">zugelassen</span>) or already officially deregistered (<span class="german-hint">abgemeldet</span>).</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 2: EXTERIOR BODY WALKAROUND -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 2: Exterior Body Walkaround & Collision Forensics</div>
+        <div class="stage-loc">📍 Standing Outside (Walk Clockwise)</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s2_1">
+          <div class="item-content">
+            <div class="item-title">Verify VIN Stamped on Windshield & Driver B-Pillar Sticker</div>
+            <div class="item-desc">Confirm <span class="german-hint">LRWYGCEK2NC421019</span> stamped in lower driver-side windshield glass matches the black B-pillar barcode sticker.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_2">
+          <div class="item-content">
+            <div class="item-title">Front Aluminum Bumper Beam & Honeycomb Crash Cans</div>
+            <div class="item-desc">Look through the lower front bumper intake with a flashlight. Inspect extruded aluminum bumper crossmember and hexagonal crash boxes for ripple deformation, crimping, or non-factory weld beads.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_3">
+          <div class="item-content">
+            <div class="item-title">Radiator, AC Condenser Stack & Motorized Grille Louvers</div>
+            <div class="item-desc">Shine a light into the lower front intake. Ensure condenser fins have zero frontal impact bending or stone punctures, and verify motorized lower louvers move freely without binding.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_4">
+          <div class="item-content">
+            <div class="item-title">Windshield Camera Zone & Acoustic Glass Chips</div>
+            <div class="item-desc">Inspect windshield with flashlight, especially directly in front of the upper forward Autopilot triple-camera pod. Stone chips or micro-bullseyes in camera vision line will blind Autopilot and fail German TÜV.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_5">
+          <div class="item-content">
+            <div class="item-title">Matrix LED Projector Headlights & Fog Lights</div>
+            <div class="item-desc">Check round projector lenses for internal moisture droplets or heavy stone-chip pitting. Confirm daytime running light strips illuminate uniformly.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_6">
+          <div class="item-content">
+            <div class="item-title">Panel Gap Uniformity & Paint Depth (Gauge Test)</div>
+            <div class="item-desc">Factory Shanghai paint: <b>100 – 135 µm</b>. Respray: <b>&gt; 180 µm</b>. Body filler: <b>&gt; 350 µm</b>. Verify hood, doors, and tailgate gaps are symmetrical on both sides.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_7">
+          <div class="item-content">
+            <div class="item-title">Door Weatherstrip Seams & Factory Resistance Spot Welds</div>
+            <div class="item-desc">Gently pull back door rubber weatherstrips: verify uniform robot resistance spot welds and clean robotic PVC seam sealer.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_8">
+          <div class="item-content">
+            <div class="item-title">Hinge Bolts Factory Paint Check (Hood, Doors, Tailgate)</div>
+            <div class="item-desc">Check the factory paint on all hinge bolts and fender mount screws. Untouched bolts have clean, unbroken paint. Scuffed bolt hexes or chipped wrench marks indicate panel removal/replacement after a crash.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_9">
+          <div class="item-content">
+            <div class="item-title">B-Pillar Camera Windows Condensation Check</div>
+            <div class="item-desc">Inspect glossy black B-pillar camera windows on both sides. Ensure moisture has not seeped between outer glass and camera lens (causes "Door pillar camera blinded" alerts).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_10">
+          <div class="item-content">
+            <div class="item-title">Frameless Window Auto-Drop on Exterior Handle Pull</div>
+            <div class="item-desc">Pull each of the 4 exterior door handles: window glass must automatically drop ~10 mm <i>before</i> the door latch releases.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_11">
+          <div class="item-content">
+            <div class="item-title">Mirror Triangle Rubber Wind Seals</div>
+            <div class="item-desc">Inspect triangular rubber seal at the base of both side mirrors for puckering or misalignment (the #1 source of 130 km/h wind whistle).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_12">
+          <div class="item-content">
+            <div class="item-title">Taillight Clusters Internal Water Droplets Check</div>
+            <div class="item-desc">Inspect outer and inner rear taillight assemblies for standing water condensation droplets (not just light mist, but pooled standing water).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_13">
+          <div class="item-content">
+            <div class="item-title">Power Tailgate Alignment & Bumper Rub Marks</div>
+            <div class="item-desc">Close motorized tailgate. Inspect lower painted edge of hatch where it meets rear bumper. Ensure hatch rubber stoppers are adjusted and painted edge is not rubbing into bumper clearcoat.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_14">
+          <div class="item-content">
+            <div class="item-title">Panoramic Glass Roof External Glass & Seals</div>
+            <div class="item-desc">Inspect panoramic glass roof surface from outside for rock chips, hairline stress cracks, or lifting perimeter seals.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s2_15">
+          <div class="item-content">
+            <div class="item-title">License Plate Mounts & Bumper Holders (Kennzeichenhalter)</div>
+            <div class="item-desc">Inspect front and rear license plate brackets. Confirm the front holder is firmly anchored to the bumper polyurethane without broken clips or loose rattling. Check that no rough drywall or self-tapping screws were drilled into the front bumper paint outside the factory bracket footprint.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 3: WHEELS, BRAKES & UNDERCARRIAGE -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 3: Wheels, Suspension, Brakes & Undercarriage</div>
+        <div class="stage-loc">📍 Kneeling at Each Wheel & Ground</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s3_1">
+          <div class="item-content">
+            <div class="item-title">20" Induction Summer Wheels Check (2 Wheels Curbed)</div>
+            <div class="item-desc">Inspect outer rim lip curb rash (as seen in photo 15.38.48.jpeg). Confirm tire sidewall has zero cuts or bulges. Remaining summer tread is healthy at ~4.5–5.0 mm.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_2">
+          <div class="item-content">
+            <div class="item-title">Brembo 4-Piston Calipers & Disc Rotor Swept Area</div>
+            <div class="item-desc">Inspect rotor friction faces for salt pitting or corrosion rings from one-pedal regen. Verify brake pad lining is &gt; 5.0 mm.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_3">
+          <div class="item-content">
+            <div class="item-title">Front Upper Control Arm (Wishbone) Ball Joint Boots & Bounce Test</div>
+            <div class="item-desc">Inspect ball joint rubber dust boots for tears or grease weeping. Push down firmly on front fender to bounce suspension; listen for squeaking/groaning from dry ball joints.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_4">
+          <div class="item-content">
+            <div class="item-title">Front Lower Lateral Links & Large Hydro-Bushings</div>
+            <div class="item-desc">Inspect the large rear hydro-bushing on the lower compression link with a pry bar. Look for rubber tearing, delamination, or dampness from leaking hydraulic fluid inside the bushing.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_5">
+          <div class="item-content">
+            <div class="item-title">Electric Power Steering (EPS) Rack & Tie Rod Ends</div>
+            <div class="item-desc">Check inner and outer tie rod ball joints and rubber accordion boots for splits. Ensure steering linkages are tight with zero lash.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_6">
+          <div class="item-content">
+            <div class="item-title">Rear Multi-Link Suspension (5 links per side) & Subframe Mounts</div>
+            <div class="item-desc">Check upper camber links, toe links, and trailing arms for bushing play. Inspect rear subframe rubber isolation mounts for torsional cracking under torque load.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_7">
+          <div class="item-content">
+            <div class="item-title">HV Battery Enclosure Skid Plates & Floorpan Rails</div>
+            <div class="item-desc">Shine flashlight under car: inspect underside protective skid plates and aluminum battery floorpan. Look for deep scrape gouges or puncture dents. <i>(Critical: Underside denting &gt; 8 mm or cracked pack seals can void Tesla's 8-year HV warranty!).</i></div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_8">
+          <div class="item-content">
+            <div class="item-title">4 Pinch Weld Jacking Points (Lift Puck Sockets)</div>
+            <div class="item-desc">Check all 4 circular jacking puck holes. Ensure careless tire shop lifts didn't crush the rocker seams or deform the outer battery module housing.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_9">
+          <div class="item-content">
+            <div class="item-title">Front & Rear Drive Unit Casings & Axle Seals (Fluid Leaks)</div>
+            <div class="item-desc">Inspect front induction motor and rear permanent magnet motor casings. Look for gear oil seepage from differential output half-shaft seals or sweating along gearbox mating splits.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_10">
+          <div class="item-content">
+            <div class="item-title">Rear Megacasting Structural Integrity (Shanghai Die-Cast)</div>
+            <div class="item-desc">Inspect the single-piece high-pressure die-cast aluminum rear underbody structure. Look for casting stress cracks, hairline fractures near suspension mount nodes, or clamp marks from a collision pulling rack.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s3_11">
+          <div class="item-content">
+            <div class="item-title">Thermal Cooling Lines & Octovalve Plumbing</div>
+            <div class="item-desc">Inspect cooling lines routed from the battery pack to the front heat pump/octovalve. Look for dried white/blue crystalline ethylene glycol coolant residue at quick-disconnect fittings.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 4: FRUNK, TRUNK & ACCESSORIES -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 4: Storage Compartments & Second Wheelset</div>
+        <div class="stage-loc">📍 Frunk, Trunk & Sub-Trunk</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s4_1">
+          <div class="item-content">
+            <div class="item-title">Frunk Tub, Latch & Wiper Washer Fluid Jet Spray</div>
+            <div class="item-desc">Open frunk: verify emergency release button glows in dark and latch operates smoothly. Press wiper wash stalk: confirm fluid sprays cleanly through nozzles embedded in wiper arms.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_2">
+          <div class="item-content">
+            <div class="item-title">19" Borbet Y Winter Wheelset Inspection</div>
+            <div class="item-desc">Inspect all 4 loose Borbet Y titan-matt alloy wheels: verify completely spotless, zero curb rash, with Borbet center caps. Road-legal in Germany with ECE/KBA approval.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_3">
+          <div class="item-content">
+            <div class="item-title">Winter Tires Tread Depth & 3PMSF Alpine Snowflake Symbol</div>
+            <div class="item-desc">Measure tread depth on Continental WinterContact tires: confirm ~6.5–7.0 mm remaining (near-new condition) with 3PMSF snowflake symbol.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_4">
+          <div class="item-content">
+            <div class="item-title">Bluetooth TPMS Metal-Collar Valves on Winter Set</div>
+            <div class="item-desc">Verify all 4 winter wheels have rigid black clamp-in metal-collar valve stems with retaining nuts, confirming internal Bluetooth Low Energy (BLE) pressure sensors.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_5">
+          <div class="item-content">
+            <div class="item-title">Wheel Lock Security Socket & Lug Nut Compatibility</div>
+            <div class="item-desc">Check glovebox or trunk subfloor for security wheel lock key socket (<i>Felgenschloss-Adapter</i>) if locking nuts are installed. Confirm standard 21mm lug nuts for both sets are present.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_6">
+          <div class="item-content">
+            <div class="item-title">Sub-Trunk Lower Plastic Well Water Pooling Check</div>
+            <div class="item-desc">Lift main trunk false floor, then lift deep sub-trunk lower lid. Reach into deepest bottom corner of plastic well with bare hand. Ensure zero water pooling from a weeping hatch seal or taillight wiring grommet.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_7">
+          <div class="item-content">
+            <div class="item-title">Towing Hitch Hardware Presence Check</div>
+            <div class="item-desc">Registration papers state <span class="german-hint">"ww. AHK lt. EGTG*"</span> (homologated for towing up to 1,600 kg). Check rear bumper center cutout and sub-trunk to see if physical detachable ball hitch neck & keys are included, or if it is type-approved for plug-and-play retrofit.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s4_8">
+          <div class="item-content">
+            <div class="item-title">Charging Cables & Mobile Connector Included</div>
+            <div class="item-desc">Verify Type 2 Mennekes public charging cable (blue or black) and Tesla UMC 230V household Schuko charger bag are in frunk or trunk.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 5: IN-CABIN PHYSICAL CHECK -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 5: In-Cabin Comfort & Switchgear Check</div>
+        <div class="stage-loc">📍 Sitting Inside Driver & Passenger Seats</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s5_1">
+          <div class="item-content">
+            <div class="item-title">Driver Entry Seat Bolster & White Cushion Quality</div>
+            <div class="item-desc">Inspect driver white vegan leather: verify zero blue denim dye transfer, tears, or peeling. Cushion retains firm factory shape with normal micro-creasing only.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s5_2">
+          <div class="item-content">
+            <div class="item-title">Power Seat Rails & Lumbar Motor Travel</div>
+            <div class="item-desc">Run both driver and passenger seats through full mechanical travel: forward, backward, tilt, seat base elevation, and pneumatic lumbar bladder support.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s5_3">
+          <div class="item-content">
+            <div class="item-title">Steering Wheel Leather & Physical Column Stalks</div>
+            <div class="item-desc">Confirm steering wheel leather is matte and unpeeled. Test physical turn signal stalk and drive selector stalk (2022 build retains physical stalks!).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s5_4">
+          <div class="item-content">
+            <div class="item-title">Center Console, Sliding Lid & Dual Wireless Phone Chargers</div>
+            <div class="item-desc">Slide open center console lids smoothly. Place phone on both left and right wireless charging pads to verify immediate charging.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s5_5">
+          <div class="item-content">
+            <div class="item-title">Panoramic Glass Roof Internal View & Headliner</div>
+            <div class="item-desc">Inspect glass roof from inside: verify zero stress fractures, clean headliner fabric with zero water stains or sagging.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s5_6">
+          <div class="item-content">
+            <div class="item-title">Front Passenger Footwell Carpet Moisture Check</div>
+            <div class="item-desc">Reach down under glovebox on passenger side and press firmly into carpet. Check for dampness/wetness caused by a kinked or detached HVAC evaporator condensation drain hose.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 6: CENTER SCREEN, HVAC & BATTERY DIAGNOSTICS -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 6: Center Screen, Diagnostics, HVAC & Battery Scan</div>
+        <div class="stage-loc">📍 Operating Center Touchscreen</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s6_1">
+          <div class="item-content">
+            <div class="item-title">Center Touchscreen Display Health</div>
+            <div class="item-desc">Test touch responsiveness, zero dead pixels, and zero yellow edge borders (UV adhesive degradation).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_2">
+          <div class="item-content">
+            <div class="item-title">Software Screen: Verify VIN & Odometer</div>
+            <div class="item-desc">Go to Settings &gt; Software: Confirm VIN is <span class="german-hint">LRWYGCEK2NC421019</span> and odometer reads ~46,060 km. Processor: AMD Ryzen.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_3">
+          <div class="item-content">
+            <div class="item-title">Enhanced Autopilot (EAP) Package Confirmation on Screen</div>
+            <div class="item-desc">Under <span class="german-hint">Inbegriffene Pakete</span>: Confirm Navigate on Autopilot (<span class="german-hint">Mit Lenkassistent navigieren</span>), Auto Lane Change (<span class="german-hint">Spurwechselassistent</span>), Autopark (<span class="german-hint">Autoparken</span>), and Summon (<span class="german-hint">Herbeirufen</span>).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_4">
+          <div class="item-content">
+            <div class="item-title">Tesla Account & App: Supercharger Status Check <span class="alert-tag verify">Account Check</span></div>
+            <div class="item-desc">Have seller open their active Tesla App: verify the vehicle is recognized normally with full active connectivity, zero "Supercharging Disabled" warnings, and zero "Unsupported Vehicle" / salvage flags. (Note: On-screen preconditioning is purely local thermal and does NOT verify backend authorization).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_5">
+          <div class="item-content">
+            <div class="item-title">Seller's Tesla App: Unpaid Invoices & Idle Fees Check</div>
+            <div class="item-desc">Ask seller/dealer to open their Tesla App: tap <b>Profile &gt; Charging &gt; History</b>. Ensure zero unpaid Supercharging invoices, failed credit card charges, or parking idle fees (<span class="german-hint">Blockiergebühren</span>) that temporarily lock Supercharging.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_6">
+          <div class="item-content">
+            <div class="item-title">Full Heat (HI) Stress Test (60–90 seconds)</div>
+            <div class="item-desc">Tap Climate icon: set both temperatures to <b>HI</b>, Fan Speed <b>8–10</b>, A/C enabled. Air must become scorching hot (&gt; 45°C) within 90 seconds. Listen outside front wheel wells: Octovalve compressor should emit a steady, smooth whirring hum (no metal clattering or heavy vibration).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_7">
+          <div class="item-content">
+            <div class="item-title">Full Cold (LO) Maximum A/C Test</div>
+            <div class="item-desc">Set temperature immediately to <b>LO</b>, Fan Speed <b>8–10</b>, Recirculation ON. Vents must pump ice-cold refrigerated air (&lt; 6–8°C) within 60 seconds. Verify all dashboard vent slits blow evenly across left, center, and right.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_8">
+          <div class="item-content">
+            <div class="item-title">Mildew / "Gym Sock" Cabin Filter Odor Check</div>
+            <div class="item-desc">Turn fan on fresh air intake (Recirculation OFF) at fan speed 4. Smell airflow directly: common Tesla issue where evaporator moisture causes biological mildew odor in dual cabin filters (replacement kit is €40–€70).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_9">
+          <div class="item-content">
+            <div class="item-title">Enter Tesla Service Mode: BMS Error Log Check <span class="alert-tag danger">⛔ Walk-Away Check</span></div>
+            <div class="item-desc">Go to Software &gt; Long-press "MODEL Y" for 3s &gt; type <span class="german-hint">service</span> &gt; Go to High Voltage &gt; Battery. Check error history: <b>⛔ WALK AWAY IMMEDIATELY</b> if you see codes like <code>BMS_a066</code> (maximum charge capacity reduced), <code>BMS_a079</code>, <code>BMS_w035</code>, or active HV isolation warnings.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_10">
+          <div class="item-content">
+            <div class="item-title">Service Mode &gt; Thermal Tab Diagnostic Check</div>
+            <div class="item-desc">In Service Mode, navigate to <b>Thermal</b>. View live refrigerant pressures (high/low side in bar), compressor RPM, and Octovalve valve positions. Confirm zero active or historical thermal fault codes.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_11">
+          <div class="item-content">
+            <div class="item-title">16V Lithium-Ion Low Voltage Auxiliary Battery Status</div>
+            <div class="item-desc">Check Service Mode &gt; Low Voltage: ensure status is <b>Nominal</b> with zero low-voltage battery warnings.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_12">
+          <div class="item-content">
+            <div class="item-title">OBD Scan: Nominal Full Pack Degradation Benchmarks <span class="alert-tag danger">⛔ Walk-Away: &gt; 13%</span></div>
+            <div class="item-desc">For this <b>LG 5L (Y5LD) 78.8 kWh pack</b> at 46k km:<br>
+            • <b>Top Tier (3.5–5.5% loss):</b> 74.5 – 76.0 kWh (Buy immediately)<br>
+            • <b>Normal (5.5–7.5% loss):</b> 73.0 – 74.4 kWh (Healthy green light)<br>
+            • <b>Elevated (8.0–10.5% loss):</b> 70.5 – 72.9 kWh (Acceptable wear)<br>
+            • <b>⚠️ Yellow Flag (11–13% loss):</b> 68.5 – 70.4 kWh (Negotiate extra discount)<br>
+            • <b>⛔ HARD WALK AWAY (&gt; 13% loss):</b> <b>&lt; 68.5 kWh</b>. <i>(Tesla warranty only covers &gt;30% degradation, so you will be stuck with a permanently degraded pack with zero warranty recourse!).</i></div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_13">
+          <div class="item-content">
+            <div class="item-title">Cell Voltage Imbalance (Delta mV) <span class="alert-tag danger">⛔ Walk-Away: &gt; 20-25 mV</span></div>
+            <div class="item-desc">In Scan My Tesla, inspect <code>Cell Temp / Min / Max Delta</code> at rest. Healthy cell delta is <b>3 to 8 mV</b> (acceptable up to 12–15 mV). <b>⛔ HARD WALK AWAY if Delta &gt; 20–25 mV</b>: indicates an internal hardware failure with a dying cell brick/module!</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_14">
+          <div class="item-content">
+            <div class="item-title">DC Fast Charge vs AC Charge Ratio</div>
+            <div class="item-desc">Check lifetime kWh: &lt; 40% DC Supercharging is ideal for longevity; 40–60% is normal.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s6_15">
+          <div class="item-content">
+            <div class="item-title">Quick 30-Second 100% Rated Range Formula Check <span class="alert-tag danger">⛔ Walk-Away: &lt; 440 km</span></div>
+            <div class="item-desc">Switch battery from % to km. Formula: <code>(Displayed km / Current %) * 100</code>.<br>
+            • <b>&gt; 475 km:</b> Excellent health (~5% degradation).<br>
+            • <b>455 – 474 km:</b> Normal healthy range (~7–9% degradation).<br>
+            • <b>⛔ HARD WALK AWAY if &lt; 440 km:</b> Indicates &gt;13% severe premature degradation.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 7: DYNAMIC TEST DRIVE -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 7: Dynamic Road Test Protocol</div>
+        <div class="stage-loc">📍 Behind the Wheel on Road</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s7_1">
+          <div class="item-content">
+            <div class="item-title">Slow Speed 360° Lock-to-Lock Parking Circle</div>
+            <div class="item-desc">In dealer lot, turn steering wheel to full left lock and drive slowly in a complete circle; repeat on full right lock. Listen for CV joint clicking, front suspension binding, or scrubbing noises.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s7_2">
+          <div class="item-content">
+            <div class="item-title">Hard Launch Acceleration (Front Half-Shaft Shudder Check)</div>
+            <div class="item-desc">From 20–30 km/h in a straight line, floor accelerator pedal. Acceleration must be smooth and linear. <i>(Watch for front drive axle / CV joint wobble or shudder under full torque, a known Model Y trait).</i></div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s7_3">
+          <div class="item-content">
+            <div class="item-title">Dynamic Sway & Weight Transfer Test (Slalom Test)</div>
+            <div class="item-desc">At 40–50 km/h on a clear safe street, gently sway car left and right to transfer lateral weight. Listen for suspension knock, anti-roll bar drop-link clicks, or loose strut top mounts.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s7_4">
+          <div class="item-content">
+            <div class="item-title">Hard Threshold Braking & ABS Activation</div>
+            <div class="item-desc">From 60 km/h, perform a firm threshold emergency brake stop. Verify ABS pulses smoothly, car tracks dead straight without pulling left or right, and steering wheel has zero high-frequency flutter (indicates warped rotors).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s7_5">
+          <div class="item-content">
+            <div class="item-title">Highway High-Speed Balance & Wind Whistle (120–130 km/h)</div>
+            <div class="item-desc">Take car onto highway/bypass. Check for steering wheel vibrations at 120–130 km/h (checks dynamic balance of 20" Induction wheels). Listen for wind whistle around side mirror triangles and glass roof seals.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s7_6">
+          <div class="item-content">
+            <div class="item-title">Mandatory Physical Supercharger Plug-in Test <span class="alert-tag danger">The Only 100% Proof</span></div>
+            <div class="item-desc">Stop for 2 minutes at the nearby Supercharger (tell dealer in advance you will reimburse €2 cash for power used). Plug in cable: port LED must pulse blue, then turn <b>pulsing GREEN</b> as contactors close with a loud <code>CLACK-CLACK</code> and kW speed climbs.<br>
+            • <b>Healthy:</b> Port pulses green, charging begins.<br>
+            • <b>Billing Issue:</b> Screen says <i>"Payment method required / unpaid balance"</i> (account issue, not car ban).<br>
+            • <b>⛔ Salvage / Blacklist Ban:</b> Port turns <b>solid RED immediately</b>, contactors drop out, error <code>BMS_u025</code> appears.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STAGE 8: HANDOVER & ONLINE REGISTRATION -->
+    <div class="stage-card">
+      <div class="stage-header">
+        <div class="stage-title">Stage 8: Handover, Tesla App Pairing & Online Registration</div>
+        <div class="stage-loc">📍 Dealership Office / In-Car</div>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" id="s8_1">
+          <div class="item-content">
+            <div class="item-title">Tesla App Vehicle Ownership Transfer & Driver Access Backup</div>
+            <div class="item-desc">Have seller open their Tesla App and tap <b>Manage Vehicle &gt; Remove Vehicle</b>. Then open your Tesla App, tap <b>Add Vehicle</b>, and complete pairing. <i>Pro Tip: If official transfer takes time to clear, ask seller to tap "Add Driver" and send you an invite link so you have full phone-key and app control immediately for the drive home!</i></div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s8_2">
+          <div class="item-content">
+            <div class="item-title">eID Ready on Smartphone (AusweisApp2)</div>
+            <div class="item-desc">Have German ID card (Personalausweis) with online eID active, 6-digit PIN known, and NFC scanning enabled.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s8_3">
+          <div class="item-content">
+            <div class="item-title">Insurance eVB Number for Online Transfer Ready</div>
+            <div class="item-desc">Obtain eVB code from your car insurer marked for online transfer (look for <span class="german-hint">"Umschreibung / Halterwechsel via i-Kfz"</span>).</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s8_4">
+          <div class="item-content">
+            <div class="item-title">Scratch Off Security Seals on Part 1 & Part 2 Papers (Coin Only!)</div>
+            <div class="item-desc"><b>Use a flat 20-cent or 50-cent coin only (NEVER a knife or key)!</b> Gently scratch silver seal on back of Registration Part 1 (Teil I) to reveal 7-character code. Scratch green seal on Part 2 (Brief GM553869 under <span class="german-hint">RMQrKricg6</span>) to reveal 12-character code without tearing the paper.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s8_5">
+          <div class="item-content">
+            <div class="item-title">Complete Online Form & Download "Provisional Registration Certificate"</div>
+            <div class="item-desc">Submit on municipal i-Kfz portal, pay ~€30 fee, and download PDF certificate (<span class="german-hint">Vorläufiger Zulassungsnachweis</span>). Print or place in windshield: legally drive immediately for up to 10 days!</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" id="s8_6">
+          <div class="item-content">
+            <div class="item-title">Mount License Plates & Test Rear Plate Illumination (Kennzeichenbeleuchtung)</div>
+            <div class="item-desc">Snap your driving plates firmly into both front and rear carriers before rolling onto public roads. Turn on parking/driving lights and verify both white LED rear license plate lamps illuminate cleanly (mandatory StVO § 49a requirement).</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  
+    </div>
+
+    <!-- TAB PANE 2: DEEP DIVE ANALYSIS -->
+    <div class="tab-pane" id="pane-deepdive">
+      <div class="md-article">
+        <h1>Tesla Model Y Long Range AWD (2022) - In-Depth Vehicle Evaluation &amp; Verification Report</h1>
+<p><strong>Vehicle Location:</strong> Tsalidis Automobile, Fürther Str. 342, 90429 Nürnberg<br />
+<strong>Original Listed Price:</strong> €32,500 Gross (incl. 19% MwSt.)<br />
+<strong>Agreed Purchase Price:</strong> <strong>€31,500 Gross</strong> (incl. 19% MwSt.) / <strong>€26,470.59 Net</strong> <em>(Saved €1,000 / 3.1% discount)</em><br />
+<strong>Mileage:</strong> 46,060 km<br />
+<strong>First Registration:</strong> 02.09.2022<br />
+<strong>VIN:</strong> <code>LRWYGCEK2NC421019</code><br />
+<strong>License Plate:</strong> <code>N-ST 8466 E</code><br />
+<strong>Color:</strong> Pearl White Multi-Coat / White Premium Vegan Leather  </p>
+<hr />
+<h2>1. Executive Summary &amp; Verification Answers</h2>
+<h3>Q1: The 2 Curbed 20" Induction Wheels — Severity &amp; Safety</h3>
+<ul>
+<li><strong>Visual Inspection (<code>15.38.48.jpeg</code>):</strong> The curb rash is purely <strong>cosmetic abrasion on the outer rim bead</strong>. </li>
+<li><strong>Structural Integrity:</strong> <strong>100% Safe.</strong> There is no rim bend, no crack, no spoke distortion, and no alloy chunk missing.</li>
+<li><strong>Tire Sidewall:</strong> Uncompromised. The Induction tire's built-in rim-protection bead absorbed the scrape without cutting into the tire cords or causing any sidewall bubbling/herniation.</li>
+<li><strong>Repair Cost &amp; Negotiation Leverage:</strong></li>
+<li>Professional CNC/Smart repair + satin black powder-coat re-touch: <strong>~€80–€120 per wheel</strong> (€160–€240 total).</li>
+<li>DIY option: Tesla Induction Satin Black Touch-up Pen (~€15) hides ~90% of the rash.</li>
+<li><strong>Deduction value for price negotiation:</strong> €300 – €500.</li>
+</ul>
+<h3>Q2: Winter Wheel Set — Does it have TPMS?</h3>
+<ul>
+<li><strong>Answer:</strong> <strong>YES, it has active BLE TPMS sensors.</strong></li>
+<li><strong>Evidence (<code>15.36.23.jpeg</code>):</strong> The wheel features a black clamp-in metal-collar valve stem at the 8 o'clock barrel position with a threaded locking nut and rubber grommet. Standard non-TPMS valves use cheap snap-in flexible rubber. For 2021+ Teslas, this rigid metal valve assembly houses a Bluetooth Low Energy (BLE) tire pressure sensor.</li>
+</ul>
+<h3>Q3: Winter Wheel Rim Brand, Model &amp; Safety/Legality</h3>
+<ul>
+<li><strong>Exact Wheel:</strong> <strong>Borbet Y</strong> (manufactured by Borbet GmbH, Germany).</li>
+<li><strong>Finish:</strong> Titan Matt / Anthracite.</li>
+<li><strong>Tire:</strong> Continental WinterContact TS 870 P / WinterContact series.</li>
+<li><strong>Safety &amp; Legality:</strong> <strong>Top-tier &amp; 100% Street Legal in Germany.</strong></li>
+<li>Borbet is an official OEM supplier to Porsche, Audi, and BMW.</li>
+<li>Borbet Y 19" wheels for Tesla Model Y come with <strong>ECE-R124 homologation and KBA ABE certification</strong>. They are plug-and-play legal, use OEM Tesla wheel lug nuts, and do not require any TÜV Einzelabnahme (individual registration entry).</li>
+</ul>
+<h3>Q4: Seat Condition (White Vegan Leather) — Worn out? Creasing? Folds?</h3>
+<ul>
+<li><strong>Evidence (<code>44519208-97a1-49c4-ab47-a4089d7aed9a.jpg</code>, <code>4dcc7d59</code>, <code>82d4162c</code>):</strong></li>
+<li><strong>Color &amp; Hygiene:</strong> Completely clean bright white. <strong>Zero denim/blue jean dye transfer</strong>, zero grease spots, and zero UV yellowing.</li>
+<li><strong>Seat Base / Cushion:</strong> Remains taut and firmly shaped. Minimal natural micro-creasing on the cushion surface typical of 46k km, but <strong>no bagging, sagging, or foam collapse</strong>.</li>
+<li><strong>Entry Bolster:</strong> Driver-side entry bolster shows very light superficial entry compression wrinkles, but <strong>no cracks, no peeling, and no seam stress</strong>.</li>
+<li><strong>Passenger &amp; Rear Seats:</strong> Look virtually unused / showroom fresh.</li>
+<li><strong>Verdict:</strong> Rated <strong>9.2 / 10</strong> for condition.</li>
+</ul>
+<h3>Q5: Complete VIN Match Verification</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">Document / Photo</th>
+<th style="text-align: left;">VIN Recorded</th>
+<th style="text-align: left;">Match Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tesla On-Screen System</strong></td>
+<td style="text-align: left;"><code>WhatsApp Image ... 11.29.10.jpeg</code></td>
+<td style="text-align: left;"><code>LRWYGCEK2NC421019</code></td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DEKRA HU Prüfbericht</strong></td>
+<td style="text-align: left;">Report P075202002676 (21.10.2025)</td>
+<td style="text-align: left;"><code>LRWYGCEK2NC421019</code></td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Zulassungsbescheinigung Teil I</strong></td>
+<td style="text-align: left;">Schein <code>N-S-1-326/22-00199</code></td>
+<td style="text-align: left;"><code>LRWYGCEK2NC421019</code></td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Zulassungsbescheinigung Teil II</strong></td>
+<td style="text-align: left;">Brief <code>GM553869</code></td>
+<td style="text-align: left;"><code>LRWYGCEK2NC421019</code></td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;">- <strong>Vehicle Origin:</strong> Giga Shanghai (<code>LRW</code>), Model Year 2022 (<code>N</code>), Model Y Dual Motor Long Range.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">- <strong>Ownership Chain:</strong> 1 single real user: Registered first to Thorsten Dirk Georg Staudt on 02.09.2022, then transferred to his own company Staudt GmbH on 22.11.2022. Exactly 1 private/business operator.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h3>Q6: Tread Depth Assessment</h3>
+<ul>
+<li><strong>Winter Tires (Continental WinterContact on Borbet Y):</strong></li>
+<li>Remaining Depth: <strong>~6.5 – 7.0 mm</strong> (Brand new is ~8.2 mm).</li>
+<li>Condition: Excellent winter sipes, no uneven camber wear, 3PMSF Alpine snowflake symbol present. Easily good for 2–3 full winter seasons.</li>
+<li><strong>Summer Tires (Mounted on 20" Induction):</strong></li>
+<li>Remaining Depth: <strong>~4.5 – 5.0 mm</strong> (Legal minimum 1.6 mm, replacement recommended at 3.0 mm).</li>
+<li>Condition: Good even wear across the contact patch. Safe for another 15,000–20,000 km.</li>
+</ul>
+<hr />
+<h2>2. Battery Health, Pack Identification &amp; On-Site OBD Diagnostic Scan</h2>
+<h3>Exact Battery Specifications (from Zulassungsbescheinigung Teil I):</h3>
+<ul>
+<li><strong>Type / Variant:</strong> <code>003</code> / <code>Y5LD</code> | <strong>Version:</strong> <code>BZb3s5T3</code></li>
+<li><strong>Chemistry &amp; Manufacturer:</strong> <strong>LG Energy Solution (NMC 2170)</strong> pack, manufactured at Giga Shanghai.</li>
+<li><strong>Factory Nominal Full Pack (New):</strong> <strong>~78.8 kWh</strong> (~75.0 – 75.5 kWh usable + 3.5 kWh bottom buffer).</li>
+<li><strong>Factory Battery &amp; Drive Unit Warranty:</strong> <strong>8 years or 192,000 km</strong> with guaranteed min. 70% retention (Active until <strong>02.09.2030</strong> or 192,000 km).</li>
+</ul>
+<h3>Expected Health &amp; Exact Walk-Away Benchmarks at 46,060 km:</h3>
+<blockquote>
+<p>[!WARNING]<br />
+<strong>Do not rely on the Tesla Warranty to save you from a degraded battery:</strong><br />
+Tesla's 8-year warranty only covers degradation <strong>exceeding 30%</strong> (&lt; 55.1 kWh on this 78.8 kWh pack)! If this car has 12% to 20% degradation, it is in terrible health for 46k km, yet Tesla will legally reject any warranty claim as "normal operating wear". Even if below 70%, Tesla supplies a remanufactured pack that barely passes 70%.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Health Level</th>
+<th style="text-align: left;">Degradation %</th>
+<th style="text-align: left;">Nominal Full Pack</th>
+<th style="text-align: left;">100% Displayed Range (20" Induction)</th>
+<th style="text-align: left;">Decision / Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Top Tier (Best)</strong></td>
+<td style="text-align: left;"><strong>3.5% – 5.5%</strong></td>
+<td style="text-align: left;"><strong>74.5 – 76.0 kWh</strong></td>
+<td style="text-align: left;"><strong>478 – 490 km</strong></td>
+<td style="text-align: left;"><strong>Buy immediately (Green light)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Normal / Expected</strong></td>
+<td style="text-align: left;"><strong>5.5% – 7.5%</strong></td>
+<td style="text-align: left;"><strong>73.0 – 74.4 kWh</strong></td>
+<td style="text-align: left;"><strong>468 – 477 km</strong></td>
+<td style="text-align: left;"><strong>Healthy wear for 46k km</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Elevated Wear</strong></td>
+<td style="text-align: left;"><strong>8.0% – 10.5%</strong></td>
+<td style="text-align: left;"><strong>70.5 – 72.9 kWh</strong></td>
+<td style="text-align: left;"><strong>455 – 467 km</strong></td>
+<td style="text-align: left;"><strong>Acceptable, but negotiate discount</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>⚠️ Yellow Flag</strong></td>
+<td style="text-align: left;"><strong>11.0% – 13.0%</strong></td>
+<td style="text-align: left;"><strong>68.5 – 70.4 kWh</strong></td>
+<td style="text-align: left;"><strong>445 – 454 km</strong></td>
+<td style="text-align: left;"><strong>High wear; demand €1,000 off or walk</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>⛔ HARD WALK AWAY</strong></td>
+<td style="text-align: left;"><strong>&gt; 13.0%</strong></td>
+<td style="text-align: left;"><strong>&lt; 68.5 kWh</strong></td>
+<td style="text-align: left;"><strong>&lt; 440 km</strong></td>
+<td style="text-align: left;"><strong>WALK AWAY FROM THE CAR</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>The 3 Non-Negotiable Hardware "WALK AWAY" Triggers:</h3>
+<ol>
+<li><strong>Capacity Loss &gt; 13% (&lt; 68.5 kWh / &lt; 440 km rated):</strong> Abnormal accelerated degradation; Tesla warranty will refuse to touch it.</li>
+<li><strong>Cell Imbalance Delta &gt; 20–25 mV at rest:</strong> In Scan My Tesla, healthy cell delta is <strong>3 to 8 mV</strong> (acceptable up to 12–15 mV). If <strong>&gt; 20–25 mV</strong>, an internal cell group/module is defective or failing.</li>
+<li><strong>BMS Isolation / Capacity Error Codes in Service Mode:</strong> Active or stored error codes like <code>BMS_a066</code> (capacity reduced), <code>BMS_a079</code>, <code>BMS_w035</code>, or any high-voltage isolation warning.</li>
+</ol>
+<h3>How to Scan the Battery On-Site (3 Methods):</h3>
+<h4>Method 1: OBD-II Dongle + Diagnostic Harness + "Scan My Tesla" (Most Accurate)</h4>
+<ol>
+<li><strong>Hardware needed:</strong> </li>
+<li>OBDLink MX+ (or vLinker MC+) Bluetooth adapter.</li>
+<li>Tesla Model 3/Y diagnostic harness cable (connects behind rear center console air vent trim).</li>
+<li><strong>Access Point:</strong> Pull off the rear center console lower cover (below the rear USB-C ports / air vents). It snaps off easily with fingers or a plastic pry tool. Unplug the blue chassis CAN harness connector, insert the T-harness adapter, and plug in the OBD dongle.</li>
+<li><strong>App:</strong> Launch <strong>Scan My Tesla</strong> (iOS/Android).</li>
+<li><strong>Key Metrics to Read:</strong></li>
+<li><strong>Nominal Full Pack (kWh):</strong> Target <strong>73.5 – 75.0 kWh</strong>.</li>
+<li><strong>State of Health (SoH %):</strong> <code>Nominal Full Pack / 78.8 * 100</code>. Healthy = <strong>93% – 96%</strong>.</li>
+<li><strong>Cell Imbalance (Delta mV):</strong> <code>Cell Temp / Min / Max</code>. Healthy cell delta is <strong>&lt; 8 mV</strong> (acceptable &lt; 15 mV). If &gt; 25 mV, there is a weak cell module.</li>
+<li><strong>Total Discharge / Total Charge (kWh):</strong> Calculates lifetime efficiency.</li>
+<li><strong>Total DC Charge vs AC Charge (kWh):</strong> Fast-charging ratio. Less than 40% DC is gentle; 70%+ DC indicates heavy Supercharging.</li>
+</ol>
+<h4>Method 2: Free Tesla Service Mode Direct Diagnostics (No Dongle Needed!)</h4>
+<ol>
+<li>On the center display, go to <strong>Settings &gt; Software</strong>.</li>
+<li>Press and hold the <strong>"MODEL Y"</strong> badge for 3 seconds until a prompt appears.</li>
+<li>Enter password: <code>service</code> and press OK.</li>
+<li>Go to <strong>High Voltage &gt; Battery</strong>:</li>
+<li>View live battery telemetry, pack temperature, and any historical BMS alerts (e.g., <code>BMS_a066</code>, <code>BMS_w035</code>).</li>
+<li>Check if there are any battery isolation faults or degraded module warnings.</li>
+</ol>
+<h4>Method 3: Instant 30-Second Rated Range Calculation</h4>
+<ol>
+<li>Set energy display to <strong>Distance (km)</strong> instead of percentage.</li>
+<li>Note the displayed remaining km and current state of charge percentage:<br />
+   $$\text{100\% Equivalent Range} = \frac{\text{Current Displayed km}}{\text{Current \%}} \times 100$$</li>
+<li>For a 2022 Model Y Long Range on 20" Induction wheels:</li>
+<li>Factory EPA 100% when new: <strong>~505 km</strong> (WLTP is 533 km; the dash uses EPA rated curve).</li>
+<li>Expected at 46k km (5% degradation): <strong>~475 km – 485 km</strong>.</li>
+<li>If 100% calculates to <strong>&gt; 470 km</strong>, battery health is confirmed <strong>excellent</strong>.</li>
+</ol>
+<hr />
+<h2>3. Location-Ordered On-Site Inspection Protocol (8 Sequential Stages)</h2>
+<h3>🎒 What to Bring Tomorrow (Pre-Departure Checklist)</h3>
+<ul>
+<li>[ ] <strong>German ID Card (Personalausweis):</strong> Online eID activated + AusweisApp2 6-digit PIN tested on phone (remove thick phone cases for NFC chip).</li>
+<li>[ ] <strong>Bank Transfer Limit Raised to €32,000:</strong> Log into banking app right now and raise the single-transaction Instant SEPA limit (<em>Echtzeitüberweisung</em>).</li>
+<li>[ ] <strong>Insurance eVB Number:</strong> Generated explicitly for online registration / ownership transfer (<em>Umschreibung via i-Kfz</em>).</li>
+<li>[ ] <strong>OBDLink MX+ (or vLinker) + Tesla Model Y CAN Diagnostic Cable:</strong> With Scan My Tesla app installed on smartphone.</li>
+<li>[ ] <strong>Inspection Toolkit:</strong> Strong flashlight, flat 20/50-cent coin (for scratching i-Kfz seals gently without tearing paper), tire tread depth gauge, clean microfiber cloth.</li>
+<li>[ ] <strong>Digital Payment:</strong> Credit card or PayPal active on phone for ~€25–€35 municipal registration fee.</li>
+</ul>
+<hr />
+<h3>Stage 1: Documentation &amp; Legal Checks (📍 Dealer Desk / Office)</h3>
+<ol>
+<li><strong>Zulassungsbescheinigung Teil I &amp; Teil II:</strong> Confirm original physical papers match VIN <code>LRWYGCEK2NC421019</code> and owner chain (Thorsten Dirk Georg Staudt -&gt; Staudt GmbH).</li>
+<li><strong>DEKRA Report (Report P075202002676):</strong> Passed with "Ohne festgestellte Mängel" at 32,588 km; valid until October 2027.</li>
+<li><strong>Kaufvertrag <code>[X] unfallfrei</code> Check:</strong> Ensure box is ticked and €31,500 Gross is recorded. (Under § 476 BGB, Staudt GmbH cannot exclude statutory 1-year consumer warranty).</li>
+<li><strong>Key Cards:</strong> Receive both black NFC key cards in hand and test them on B-pillar.</li>
+</ol>
+<h3>Stage 2: Exterior Body Walkaround (📍 Standing Outside — Walk Clockwise)</h3>
+<ol>
+<li><strong>Front Bumper:</strong> Extruded aluminum bumper beam and hexagonal crash cans through lower grille.</li>
+<li><strong>Thermal Intake:</strong> Radiator &amp; condenser fins + motorized grille louvers.</li>
+<li><strong>Glass &amp; Cameras:</strong> Forward Autopilot camera zone on upper windshield (zero stone chips/bullseyes).</li>
+<li><strong>Lighting:</strong> Matrix LED projector lenses &amp; fog lights (zero condensation droplets).</li>
+<li><strong>Body Panels:</strong> Paint depth gauge check (100–135 µm factory Shanghai) &amp; gap symmetry.</li>
+<li><strong>Seals &amp; Welds:</strong> Pull back door weatherstrips: verify robot resistance spot welds &amp; PVC seam sealer.</li>
+<li><strong>Hinges:</strong> Untouched factory e-coat paint on hood, door, and tailgate hinge bolts.</li>
+<li><strong>B-Pillar Cameras:</strong> Inspect glossy glass windows for internal moisture fogging.</li>
+<li><strong>Frameless Windows:</strong> Verify 10 mm auto-drop on exterior handle pull before door latch releases.</li>
+<li><strong>Acoustic Wind Seals:</strong> Mirror triangle rubber seals at front door base.</li>
+<li><strong>Rear Lights:</strong> Taillight assemblies checked for standing condensation droplets.</li>
+<li><strong>Tailgate:</strong> Power liftgate alignment and rubber bump stops (no clearcoat rub on bumper).</li>
+<li><strong>Roof:</strong> Panoramic glass roof external glass condition.</li>
+</ol>
+<h3>Stage 3: Wheels, Suspension, Brakes &amp; Undercarriage (📍 Kneeling at Each Wheel &amp; Ground)</h3>
+<ol>
+<li><strong>20" Induction Summer Wheels:</strong> Inspect curb rash on outer rim lip of 2 wheels; verify ~4.5–5.0 mm tread.</li>
+<li><strong>Brembo 4-Piston Brakes:</strong> Check rotor swept faces for regen corrosion rings; pads &gt; 5.0 mm.</li>
+<li><strong>Upper Control Arms:</strong> Wishbone ball joint rubber boots (tears/grease) &amp; front bounce creak test.</li>
+<li><strong>Lower Lateral Links:</strong> Large rear hydro-bushings inspected for tearing or fluid leakage.</li>
+<li><strong>Steering Gear:</strong> Electric power steering rack &amp; tie rod ball joints.</li>
+<li><strong>Rear Suspension:</strong> Multi-link arms (5 per side) and subframe rubber mounts.</li>
+<li><strong>HV Battery Armor:</strong> Flashlight check of underside composite skid plates &amp; aluminum floorpan (zero dents &gt;8mm).</li>
+<li><strong>Lift Points:</strong> Check all 4 circular jacking puck holes (no crushed rocker seams).</li>
+<li><strong>Drive Units:</strong> Front induction &amp; rear permanent magnet motor casings (zero ATF/oil leaks at axle seals).</li>
+<li><strong>Rear Megacasting:</strong> Single-piece high-pressure die-cast aluminum underbody integrity (no cracks/pulling marks).</li>
+<li><strong>Cooling Plumbing:</strong> Battery coolant lines &amp; Octovalve quick-disconnects (no white/blue dried residue).</li>
+</ol>
+<h3>Stage 4: Storage Compartments &amp; Second Wheelset (📍 Frunk, Trunk &amp; Sub-Trunk)</h3>
+<ol>
+<li><strong>Frunk:</strong> Emergency glow release, latch, and wiper arm integrated washer fluid spray test.</li>
+<li><strong>19" Borbet Y Winter Wheels:</strong> Inspect all 4 loose alloy wheels (spotless, zero curb rash, Borbet center caps).</li>
+<li><strong>Winter Tires:</strong> Continental WinterContact tires (~6.5–7.0 mm remaining with 3PMSF Alpine snowflake).</li>
+<li><strong>TPMS Sensors:</strong> Rigid black clamp-in metal-collar BLE valve stems on winter set.</li>
+<li><strong>Accessories:</strong> Security wheel lock key socket (<em>Felgenschloss-Adapter</em>) &amp; 21mm lug nuts.</li>
+<li><strong>Sub-Trunk Well:</strong> Reach into deepest corner of lower plastic tub: verify bone dry (no water leaks).</li>
+<li><strong>Tow Hitch:</strong> Check bumper cutout &amp; confirm detachable ball hitch equipment / preparation.</li>
+<li><strong>Cables:</strong> Mennekes Type 2 cable and Tesla 230V Schuko mobile connector bag.</li>
+</ol>
+<h3>Stage 5: In-Cabin Comfort &amp; Switchgear Check (📍 Sitting Inside Driver &amp; Passenger Seats)</h3>
+<ol>
+<li><strong>White Vegan Leather:</strong> Zero denim blue dye transfer, no cracking, driver cushion &amp; bolsters firm.</li>
+<li><strong>Power Seats:</strong> Run driver &amp; passenger seats through full travel, recline, elevation, and lumbar bladder.</li>
+<li><strong>Steering &amp; Stalks:</strong> Matte steering leather; physical turn signal and drive selector stalks operational.</li>
+<li><strong>Center Console:</strong> Sliding lids, cup holders, and dual wireless phone charging pads tested.</li>
+<li><strong>Glass Roof &amp; Headliner:</strong> Interior panoramic view, zero fabric water stains or sagging.</li>
+<li><strong>HVAC Drain Check:</strong> Reach under glovebox and press firmly into passenger carpet: verify bone dry.</li>
+</ol>
+<h3>Stage 6: Center Screen, Diagnostics, HVAC &amp; Battery Scan (📍 Operating Center Touchscreen)</h3>
+<ol>
+<li><strong>Display:</strong> Zero dead pixels, responsive touch, zero yellow edge UV border.</li>
+<li><strong>Software Screen:</strong> Confirm VIN <code>LRWYGCEK2NC421019</code>, odometer ~46,060 km, AMD Ryzen MCU.</li>
+<li><strong>Software Features:</strong> Confirm Enhanced Autopilot (EAP) active under "Included Packages" (<em>Inbegriffene Pakete</em>).</li>
+<li><strong>Tesla Account &amp; App Supercharger Status:</strong> In the seller's active Tesla App, verify the car is linked with active connectivity, zero "Supercharging Disabled" warnings, and zero "Unsupported Vehicle" flags. <em>(Note: On-screen preconditioning is purely a local thermal trigger and does NOT verify backend server authorization).</em></li>
+<li><strong>Seller's Tesla App:</strong> Verify 0 unpaid charging invoices or idle fees (<em>Blockiergebühren</em>).</li>
+<li><strong>HVAC Max Heat (HI):</strong> Set to HI, fan 8–10, A/C on -&gt; scorching hot (&gt;45°C) within 90s; compressor smooth hum outside.</li>
+<li><strong>HVAC Max Cold (LO):</strong> Set to LO, fan 8–10, recirc on -&gt; ice cold (&lt;8°C) within 60s.</li>
+<li><strong>Mildew Smell:</strong> Fan speed 4 fresh air -&gt; verify no "gym sock / vinegar" odor.</li>
+<li><strong>Tesla Service Mode:</strong> Go to Software -&gt; long-press "MODEL Y" -&gt; enter <code>service</code>:</li>
+<li>High Voltage: BMS alerts, module health.</li>
+<li>Thermal Tab: Live refrigerant pressures (bar), compressor RPM, Octovalve 8-step valve positions.</li>
+<li>Low Voltage: 16V Li-ion auxiliary battery status Nominal.</li>
+<li><strong>Battery OBD Diagnostic (Scan My Tesla) / Formula:</strong><ul>
+<li>Nominal full pack: <strong>73.5 – 75.2 kWh</strong> (93.5%–95.5% SoH).</li>
+<li>Cell imbalance: <strong>&lt; 8 mV</strong> at rest.</li>
+<li>DC Supercharging ratio: &lt; 40% ideal.</li>
+<li>Rated range formula: $\frac{\text{km}}{\%} \times 100 &gt; 470\text{ km}$.</li>
+</ul>
+</li>
+</ol>
+<h3>Stage 7: Dynamic Road Test Protocol (📍 Behind the Wheel on Road)</h3>
+<ol>
+<li><strong>Slow-Speed 360° Circle:</strong> Full left and right lock in parking lot (listen for CV clicking or steering bind).</li>
+<li><strong>Hard Launch Acceleration:</strong> Full throttle from 20–30 km/h in straight line: verify zero front half-shaft shudder.</li>
+<li><strong>Dynamic Sway / Slalom Test:</strong> Weave gently at 40–50 km/h: listen for anti-roll bar drop-link clicks or strut play.</li>
+<li><strong>Hard Threshold Braking:</strong> Firm stop from 60 km/h: ABS pulses smoothly, tracks straight, zero steering flutter.</li>
+<li><strong>Highway Cruising (120–130 km/h):</strong> Check 20" Induction wheel balancing (no vibrations) and mirror triangle wind whistle.</li>
+<li><strong>Mandatory Physical Supercharger Plug-in Test:</strong> Stop for 2 minutes at the nearby Supercharger (tell dealer you'll give €2 cash for power used). Plug in cable: port LED must pulse blue, then turn <strong>pulsing GREEN</strong> as contactors close with a loud <code>CLACK-CLACK</code> and kW speed climbs.</li>
+<li><em>Healthy:</em> Port pulses green, charging begins.</li>
+<li><em>Billing Issue:</em> Screen says <em>"Payment method required / unpaid balance"</em> (account issue, not car ban).</li>
+<li><em>⛔ Salvage / Blacklist Ban:</em> Port turns <strong>solid RED immediately</strong>, contactors drop out, error <code>BMS_u025</code> appears.</li>
+</ol>
+<h3>Stage 8: Handover, Tesla App Pairing &amp; Online Registration (📍 Dealership Office / In-Car)</h3>
+<ol>
+<li><strong>Tesla App Ownership Transfer:</strong> Seller taps <em>Manage Vehicle &gt; Remove Vehicle</em>. Open your Tesla app, tap <em>Add Vehicle</em>, and pair. <em>(Backup: Have seller tap "Add Driver" and send you an invite link so you have full phone-key and app control immediately for the drive home!).</em></li>
+<li><strong>i-Kfz Online Registration:</strong></li>
+<li>AusweisApp2 eID login with 6-digit PIN.</li>
+<li>Enter eVB insurance number &amp; IBAN.</li>
+<li>Scratch silver seal on Teil I (back) and green seal on Teil II (front) <strong>gently with a coin only (NEVER a knife or key)</strong> to avoid tearing paper or codes.</li>
+<li>Pay ~€30 fee, download "Vorläufiger Zulassungsnachweis" (Provisional Registration Certificate), put in windshield, and drive home legally!</li>
+</ol>
+<hr />
+<h2>4. On-The-Spot Online Registration (<em>i-Kfz Stufe 4</em>) &amp; Immediate Drive Home Guide</h2>
+<p>You <strong>CAN</strong> complete the registration online right on your smartphone at the dealership and drive the car home immediately under German <strong>i-Kfz Stufe 4 (sofortiges Losfahren)</strong>!</p>
+<h3>What You Need Prepared Before Leaving:</h3>
+<ol>
+<li><strong>German ID / eID:</strong></li>
+<li>Personalausweis with activated online function (eID) + AusweisApp2 installed on your smartphone + your 6-digit PIN.</li>
+<li>Alternatively: eID-Karte for EU citizens or electronic residence permit (eAT).</li>
+<li><strong>eVB-Nummer (Electronic Insurance Confirmation):</strong></li>
+<li>Call or open your insurer app (e.g. HUK24, Allianz, Friday, DA Direkt).</li>
+<li>Generate an eVB explicitly valid for <strong>"Umschreibung / i-Kfz Online-Zulassung"</strong>.</li>
+<li><strong>IBAN:</strong></li>
+<li>For SEPA direct debit mandate of Kfz-Steuer (EVs are 0€ tax until 31.12.2030, but SEPA mandate is strictly required by the customs authority / Hauptzollamt).</li>
+<li><strong>Digital Payment Method:</strong></li>
+<li>Credit card, PayPal, or Giropay for the municipal portal fee (~€25 – €35).</li>
+</ol>
+<h3>What You Get From The Dealer On-Site:</h3>
+<ol>
+<li><strong>Zulassungsbescheinigung Teil I (Fahrzeugschein):</strong></li>
+<li>Must be the version issued after 2015. On the backside, there is a silver security label (<em>Sicherheitscode</em>).</li>
+<li>Scratch off the silver field to reveal the <strong>7-character code</strong>.</li>
+<li><strong>Zulassungsbescheinigung Teil II (Fahrzeugbrief):</strong></li>
+<li>Front has the green security seal (<em>RMQrKricg6</em> visible on the brief photo).</li>
+<li>Scratch off the field to reveal the <strong>12-character security code</strong>.</li>
+<li><strong>DEKRA HU Report:</strong></li>
+<li>HU valid until <strong>10/2027</strong> (Prüfbericht P075202002676). The system automatically pulls this from the KBA central database via the VIN.</li>
+<li><strong>Physical License Plates (<code>N-ST 8466 E</code> or your assigned plates):</strong></li>
+<li>If keeping the existing Bavarian plate number: Mount them on the car.</li>
+<li>If taking over an existing plate / newly pressed plates: Mount them.</li>
+</ol>
+<h3>Exact Step-By-Step Process at the Dealer:</h3>
+<ol>
+<li>Connect phone to internet and open the registration portal of your home district/city (Zulassungsbehörde / <em>i-Kfz Portal</em>).</li>
+<li>Authenticate yourself via <strong>AusweisApp2</strong> (hold ID card to back of phone and enter PIN).</li>
+<li>Select <strong>"Umschreibung / Halterwechsel"</strong> (Transfer of Ownership).</li>
+<li>Enter:</li>
+<li>VIN (<code>LRWYGCEK2NC421019</code>)</li>
+<li>Teil I 7-digit security code (scratched off on-site)</li>
+<li>Teil II 12-digit security code (scratched off on-site)</li>
+<li>eVB Number</li>
+<li>Your IBAN</li>
+<li>Confirm and pay the fee online.</li>
+<li><strong>IMMEDIATE DRIVE HOME (<em>Sofortiges Losfahren</em>):</strong></li>
+<li>The portal instantly issues a PDF document: <strong>"Vorläufiger Zulassungsnachweis"</strong> (Provisional Registration Certificate with QR verification code).</li>
+<li><strong>Download and print</strong> this PDF (ask the dealer to print it, or keep it clearly legible in your phone / printed in the dashboard).</li>
+<li>Put this sheet visibly behind your windshield on the passenger side.</li>
+<li><strong>You are legally authorized to drive immediately for up to 10 days</strong> on German public roads while your permanent registration sticker/badges and updated documents arrive in your mailbox!</li>
+</ol>
+<h3>A. Standard Contract Checkpoints (No Custom Modification Needed):</h3>
+<ol>
+<li><strong><code>[X] unfallfrei</code> Ticked:</strong> Ensure the pre-printed box <code>[X] unfallfrei</code> (accident-free) is checked on the dealer's standard contract form. By German law (§ 434 &amp; § 123 BGB), this legally excludes salvage/total loss status and guarantees immediate reversal if undisclosed damage exists.</li>
+<li><strong>"8-fach bereift" Listed:</strong> Ensure both the 20" Induction summer set and 19" Borbet Y winter set are recorded on the purchase form or handover sheet.</li>
+<li><strong>Agreed Price Recorded:</strong> €31,500 Gross (with 19% MwSt shown).</li>
+<li><strong>Statutory Warranty Protection:</strong> Because the seller named on the Zulassungsbescheinigung is <strong>Staudt GmbH</strong>, statutory 1-year consumer warranty (<em>Sachmängelhaftung</em>) applies automatically under § 474 &amp; § 476 BGB regardless of any disclaimer on the dealer's form.</li>
+</ol>
+<hr />
+<h2>5. Valuation, Agreed Price &amp; Total Deal Breakdown</h2>
+<ul>
+<li><strong>Advertised Price:</strong> €32,500 Gross (€27,311 Net)</li>
+<li><strong>Agreed Final Price:</strong> <strong>€31,500 Gross</strong> (<strong>€26,470.59 Net</strong>)</li>
+<li><strong>Negotiated Savings:</strong> <strong>€1,000.00</strong></li>
+<li><strong>Included High-Value Package Breakdown (&gt; €9,160 in Value):</strong></li>
+<li><strong>Base Vehicle:</strong> 2022 Model Y Long Range Dual Motor (46,060 km, Giga Shanghai, AMD Ryzen MCU3).</li>
+<li><strong>Enhanced Autopilot (EAP):</strong> Included (worth <strong>€3,800</strong> from Tesla).</li>
+<li><strong>20" OEM Induction Wheels:</strong> Factory option (worth <strong>€2,200</strong>).</li>
+<li><strong>Dual Wheelsets (8 Wheels Total):</strong> 19" Borbet Y Titan Matt Alloy Wheels with Continental WinterContact tires (~6.5–7.0 mm remaining + BLE TPMS) (worth <strong>~€1,800</strong>).</li>
+<li><strong>All-White Premium Vegan Leather Interior:</strong> Factory option upgrade (worth <strong>€1,200</strong>).</li>
+<li><strong>Towing Homologation ("ww. AHK lt. EGTG*"):</strong> Type-approved for 1,600 kg towing from the factory.</li>
+<li><strong>TÜV / DEKRA:</strong> Passed with 0 defects, valid until <strong>10/2027</strong> (worth <strong>€160</strong>).</li>
+<li><strong>Warranty Remaining:</strong> Battery &amp; Drive Unit covered until <strong>02.09.2030</strong> or 192,000 km.</li>
+<li><strong>Verdict:</strong> At <strong>€31,500 Gross (€26,471 Net)</strong>, this is exceptional market value for an AWD Long Range with AMD Ryzen, EAP, dual wheels, and the premium white interior. Outstanding negotiation outcome!</li>
+</ul>
+      </div>
+    </div>
+
+    <!-- TAB PANE 3: FORENSIC DEAL REVIEW -->
+    <div class="tab-pane" id="pane-review">
+      <div class="md-article">
+        <h1>Comprehensive Pixel-by-Pixel Forensic Review: Tesla Model Y Long Range AWD (2022)</h1>
+<p><strong>Vehicle:</strong> 2022 Tesla Model Y Long Range Dual Motor AWD (46,060 km)<br />
+<strong>VIN:</strong> <code>LRWYGCEK2NC421019</code> | <strong>Location:</strong> Tsalidis Automobile / Staudt GmbH, Nuremberg<br />
+<strong>Agreed Purchase Price:</strong> <strong>€31,500 Gross</strong> (incl. 19% VAT) / <strong>€26,470.59 Net</strong> <em>(Saved €1,000 off asking)</em>  </p>
+<hr />
+<h3>1. Overall Deal Score: <strong>9.6 / 10</strong> (Exceptional Market Value)</h3>
+<p>At <strong>€31,500 Gross (€26,471 Net)</strong>, this is easily in the top 2% of Model Y Long Range deals currently available in Germany. </p>
+<p>You negotiated a <strong>€1,000 cash discount</strong> on a car already priced below market average, while retaining <strong>over €9,160 in high-value factory &amp; aftermarket extras</strong>:<br />
+* <strong>Enhanced Autopilot (EAP):</strong> +€3,800 list value from Tesla.<br />
+* <strong>20" OEM Induction Wheels:</strong> +€2,200 factory option upgrade.<br />
+* <strong>19" Borbet Y + Continental Winter Wheelset:</strong> +€1,800 standalone market value.<br />
+* <strong>Premium All-White Vegan Leather Interior:</strong> +€1,200 factory option upgrade.<br />
+* <strong>DEKRA TÜV Valid until 10/2027:</strong> +€160 (fresh 2-year inspection, zero defects).</p>
+<hr />
+<h3>2. Forensic Pixel-by-Pixel Breakdown:</h3>
+<h4>A. Body, Paint &amp; Factory Build (Giga Shanghai <code>LRW</code>)</h4>
+<ul>
+<li><strong>Factory Alignment:</strong> In photos <code>01a3684f</code>, <code>099c116e</code>, <code>1dc3664f</code>, and <code>2419449f</code>, panel gaps along the hood-to-fender, doors-to-quarters, and tailgate shutlines are <strong>tight and symmetrical</strong>. Giga Shanghai vehicles from 2022 are recognized across the industry as having the tightest tolerances and highest paint/build quality of any Tesla factory (far superior to early Fremont builds).</li>
+<li><strong>Color Match:</strong> Pearl White Multi-Coat bumper covers match the metal body panels with clean color tone consistency (no yellowing or mismatched body repaints).</li>
+<li><strong>Rocker Panels:</strong> Underbody rocker skirts show no gravel peppering or wheel-arch blast damage.</li>
+</ul>
+<h4>B. Premium White Interior &amp; Vegan Leather Option (<code>44519208</code>, <code>4dcc7d59</code>, <code>82d4162c</code>)</h4>
+<ul>
+<li><strong>Factory Option (+€1,200 Value):</strong> Equipped with the rare and highly sought-after All-White Premium Interior package (white vegan leather seats, white dashboard accent beam, black Alcantara door cards).</li>
+<li><strong>Hygiene &amp; Color:</strong> Pristine. Often white Tesla interiors suffer from stubborn blue denim dye transfer or dirty armrests. Here, the driver’s cushion, passenger seat, and rear bench are bright white and uniform.</li>
+<li><strong>Bolsters &amp; Foams:</strong> The driver's entry bolster shows very light, natural relaxation micro-creases—normal for 46,000 km—but <strong>zero foam sagging, zero cracking, zero tears, and zero seam thread separation</strong>. The passenger seat looks virtually untouched.</li>
+<li><strong>Touchpoints:</strong> Matte finish on the steering wheel leather is unmarred (no peeling or greasy sheen). Center console satin black slide cover and screen edges are scratch-free.</li>
+</ul>
+<h4>C. Wheels &amp; Tires (<code>15.38.48.jpeg</code>, <code>15.36.23.jpeg</code>, <code>15.36.23(1).jpeg</code>)</h4>
+<ul>
+<li><strong>Mounted 20" Induction Wheels:</strong> The only notable cosmetic flaw on the vehicle is the curb rash on the outer rim lip of 2 wheels. The rash is strictly surface-level abrasion on the aluminum bead (no bend, no missing chunks, no structural runout). The tire's rim-protector flange absorbed the scrape without tire sidewall damage. Remaining summer tread is healthy at <strong>~4.5–5.0 mm</strong>.</li>
+<li><strong>19" Borbet Y Winter Wheelset:</strong> Spotless titan-matt alloy rims with zero curb rash. High-end Continental WinterContact tires with <strong>~6.5–7.0 mm deep sipes</strong> (virtually new), complete with factory BLE TPMS metal-collar sensors.</li>
+</ul>
+<h4>D. The Provenance &amp; Documentation (<code>17.12.58.jpeg</code>, <code>17.12.58(1).jpeg</code>)</h4>
+<ul>
+<li><strong>True Single-Driver History:</strong> While listed as "2 Halter", the Zulassungsbescheinigung reveals it was owned by <strong>Thorsten Dirk Georg Staudt</strong> from Day 1 (02.09.2022) and transferred to his own company (<strong>Staudt GmbH</strong>) on 22.11.2022. It has been driven by one single responsible business owner.</li>
+<li><strong>DEKRA Report (Report P075202002676):</strong> Inspected on 21.10.2025 at 32,588 km with result: <strong>"Ohne festgestellte Mängel" (Zero defects)</strong>. Braking values on both axles are balanced and high (420/430 daN front, 310/310 daN rear). Next HU is not due until <strong>October 2027</strong>!</li>
+<li><strong>Exact VIN Match:</strong> Screen, DEKRA, Schein (Teil I), and Brief (Teil II) match <code>LRWYGCEK2NC421019</code> 100%.</li>
+</ul>
+<hr />
+<h3>3. Hardware "Sweet Spot" Advantages of this Specific 2022 Model:</h3>
+<ol>
+<li><strong>AMD Ryzen Processor (MCU3):</strong> Fast, snappy graphics, fully compatible with future Tesla OS updates, video streaming, and modern features.</li>
+<li><strong>Physical Steering Stalks:</strong> This 2022 build retains physical turn signal stalks and gear selector stalks (unlike the stalkless steering wheel on the newer Highland/Juniper models).</li>
+<li><strong>Ultrasonic Parking Sensors (USS):</strong> Built in mid-2022 before the deletion of parking sensors, giving you real millimeter-accurate sonar distance beeps rather than buggy vision-only estimates.</li>
+<li><strong>16V Lithium-ion Auxiliary Battery:</strong> Equipped with the modernized 16V Li-ion low-voltage battery that lasts the life of the vehicle, eliminating the sudden 12V lead-acid failures.</li>
+<li><strong>LG 5L NMC Pack (<code>Y5LD</code>):</strong> 78.8 kWh gross capacity with full Tesla warranty active until <strong>September 2, 2030</strong> (or 192,000 km).</li>
+<li><strong>Factory White Interior Upgrade:</strong> High-end aesthetic and thermal advantage in summer (stays significantly cooler under the glass roof than black seats).</li>
+</ol>
+<hr />
+<h3>4. What are the Only Minor Downsides?</h3>
+<ol>
+<li><strong>2 Curbed Induction Rim Lips:</strong> Purely cosmetic; easily masked with a €15 Tesla satin-black touch-up pen or refurbished for ~€150 total.</li>
+<li><strong>Maintenance of White Interior:</strong> Will require keeping a pack of non-alcoholic baby wipes or leather cleaner in the glovebox to wipe away denim dye if you wear raw jeans.</li>
+<li><strong>No Physical Tow Ball Neck Included:</strong> Type-approved for 1,600 kg towing in papers, but physical hitch ball wasn't fitted (available from Tesla for retrofit if you ever need it).</li>
+</ol>
+<hr />
+<h3>The Final Verdict:</h3>
+<p><strong>Green light to buy with high confidence.</strong> </p>
+<p>This car has been cared for, has honest single-driver documentation, has passed TÜV with zero defects through late 2027, includes two full sets of premium wheels, features the sought-after <strong>€1,200 White Interior option</strong>, and the agreed price of <strong>€31,500 Gross</strong> makes it a home-run purchase.</p>
+      </div>
+    </div>
+
+        <!-- TAB PANE 5: UPGRADES & JUNIPER RETROFIT -->
+    <div class="tab-pane" id="pane-upgrades">
+      <div class="md-article">
+        <h1>⚡ Project Juniper: Upgrades & Styling Retrofit Blueprint</h1>
+        <p>How to transform your 2022 White Model Y Long Range into a velvet-smooth, whisper-quiet <b>"Juniper / Performance Edition"</b> while staying within a realistic budget.</p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; margin:1.5rem 0;">
+          <div style="background:rgba(15,23,42,0.6); padding:1.25rem; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="color:#38bdf8; font-size:1.1rem; font-weight:700;">Tier 1: Comfort & Styling</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#fff; margin:0.3rem 0;">~€450</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:0;">Roller parcel shelf, perimeter sound seals, rear carbon lip, Highland-style RGB ambient lighting, rear block lettering.</p>
+          </div>
+          <div style="background:rgba(15,23,42,0.6); padding:1.25rem; border-radius:10px; border:1px solid #38bdf8;">
+            <div style="color:#22c55e; font-size:1.1rem; font-weight:700;">Tier 2: The Velvet Cruiser</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#22c55e; margin:0.3rem 0;">~€1,100</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:0;">Full OEM Tesla Comfort Suspension upgrade + sound seals + roller shelf + Performance carbon lip spoiler.</p>
+          </div>
+          <div style="background:rgba(15,23,42,0.6); padding:1.25rem; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="color:#f59e0b; font-size:1.1rem; font-weight:700;">Tier 3: Full Juniper Dream</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#fff; margin:0.3rem 0;">~€1,500</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:0;">OEM Comfort Suspension + Front Cyber LED lightbar + Rear 7.2" Android display + RGB ambient dash + soundproofing.</p>
+          </div>
+        </div>
+
+        <hr>
+
+        <h2>1. Suspension & Ride Quality (The Foundation)</h2>
+        <p>The 2022 Model Y's biggest flaw is harsh high-speed compression damping over sharp expansion joints and potholes. Here are your two best real-world paths:</p>
+
+        <div style="background:rgba(15,23,42,0.5); border:1px solid var(--card-border); border-radius:10px; padding:1.25rem; margin-bottom:1.25rem;">
+          <h3 style="color:#22c55e; margin-top:0;">Option A: Official Tesla OEM Revised Comfort Suspension (~€550 – €700 total)</h3>
+          <p><b>100% Direct Bolt-on:</b> In late 2022/2023, Tesla redesigned the Model Y suspension with softer damping rates. These revised OEM parts bolt directly into the 2022 chassis with identical 3-bolt top-hats and knuckle mounts.</p>
+          <ul>
+            <li><b>How to buy:</b> Order over-the-counter directly from the Tesla Service Center via the Tesla App (<b>Service &gt; Request Parts</b>) using the official Tesla EPC catalog (zero dealership markup).</li>
+            <li><b>OEM Front Struts (Damper + Spring complete):</b> ~€180 – €220 each</li>
+            <li><b>OEM Rear Dampers:</b> ~€90 – €110 each</li>
+            <li><b>OEM Rear Springs:</b> ~€50 – €65 each</li>
+            <li><b>Result:</b> 100% genuine Tesla parts, factory ride height, takes the harsh jarring edge off city roads for ~€600 total parts!</li>
+          </ul>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.5); border:1px solid var(--card-border); border-radius:10px; padding:1.25rem; margin-bottom:1.25rem;">
+          <h3 style="color:#38bdf8; margin-top:0;">Option B: Koni Special Active (FSD) Shocks (~€800) +/- Eibach Comfort Springs (~€280)</h3>
+          <p><b>Frequency Selective Damping:</b> Uses mechanical dual-valve technology developed with McLaren. The secondary valve opens over high-frequency bumps (potholes/cobblestones) for a cloud-like ride, but stays closed in fast corners for flat sports handling.</p>
+          <ul>
+            <li><b>Koni Damper Set (Front 8245-1428L/R, Rear 8245-1429):</b> ~€800 from German shops (<i>Reber Reifenhaus, SilentDrive, Koni-Online</i>).</li>
+            <li><b>Optional Eibach Pro-Kit Comfort Springs:</b> ~€280 (progressive initial stroke for maximum rippled-asphalt compliance).</li>
+            <li><b>Result:</b> Glides over bad roads better than even a factory 2024 Model 3 Highland!</li>
+          </ul>
+        </div>
+
+        <hr>
+
+        <h2>2. The 19" Wheel Strategy: Maximum Comfort & Range + Black Performance Stance</h2>
+        <div style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:10px; padding:1.25rem; margin-bottom:1.5rem;">
+          <div style="color:#22c55e; font-size:1.15rem; font-weight:700;">💰 The Financial Flip: How to Pocket ~€900 to €1,000 in Cash</div>
+          <p style="margin:0.5rem 0 0.75rem 0;">You already have two sets of wheels included with this car. Instead of storing and swapping two heavy wheelsets twice a year:</p>
+          <ul>
+            <li><b>Sell the 20" Induction Summer Wheelset:</b> OEM 20" Induction wheels with tires sell rapidly on Kleinanzeigen/TFF Forum for <b>~€1,350 to €1,450</b> (even with minor curb rash).</li>
+            <li><b>Sell the loose 19" Continental Winter Tires:</b> Since they have ~7mm tread, sell the 4 rubber tires for <b>~€300 to €350</b>.</li>
+            <li><b>Total Cash Generated:</b> <b>+€1,650 to €1,800 CASH in hand.</b></li>
+            <li><b>Mount Brand-New Premium 19" All-Weather Tires on your Borbet Y rims:</b> 4x <b>Continental AllSeasonContact 2 (255/45 R19 104Y XL FP EVc)</b> at €190.32/tire + mounting/balancing: <b>~€840</b>.</li>
+            <li><b>NET RESULT:</b> You get a brand-new, ultra-quiet 19" year-round tire setup and <b>WALK AWAY WITH ~€850 to €950 CASH</b> to fund your OEM Comfort Suspension retrofit!</li>
+          </ul>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.6); border:1px solid #38bdf8; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <span class="badge badge-primary" style="margin-bottom:0.4rem;">Top Tire Recommendation</span>
+              <h3 style="color:#fff; margin:0.2rem 0 0.4rem 0; font-size:1.2rem;">Continental AllSeasonContact 2 — 255/45 R19 104Y XL FP EVc</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem; margin:0;">Target Offer: <b>ab €190.32 / tire</b> (4x tires = €761.28 Gross)</p>
+            </div>
+            <div style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); padding:0.5rem 0.8rem; border-radius:8px; text-align:right;">
+              <div style="font-size:1.25rem; font-weight:800; color:#38bdf8;">€190.32</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">per tire (incl. 19% MwSt.)</div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.75rem; margin-top:1rem; font-size:0.85rem;">
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <span style="color:#94a3b8; display:block; font-size:0.75rem;">EU Tyre Label</span>
+              <span style="font-weight:700; color:#fff;">⛽ B &nbsp;🌧️ B &nbsp;🔊 72 dB (B) &nbsp;❄️ 3PMSF</span>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <span style="color:#94a3b8; display:block; font-size:0.75rem;">Load & Speed Rating</span>
+              <span style="font-weight:700; color:#fff;">104Y (900 kg / 300 km/h) XL</span>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <span style="color:#94a3b8; display:block; font-size:0.75rem;">Rim Protection (FP)</span>
+              <span style="font-weight:700; color:#22c55e;">Flange Protection Bead Included</span>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:0.6rem 0.8rem; border-radius:6px;">
+              <span style="color:#94a3b8; display:block; font-size:0.75rem;">EV Technology (EVc)</span>
+              <span style="font-weight:700; color:#38bdf8;">High-Torque EV Compound</span>
+            </div>
+          </div>
+
+          <ul style="margin-top:0.9rem; font-size:0.85rem; color:#cbd5e1; line-height:1.6;">
+            <li><b>Why FP (Flange Protection) is essential:</b> A protruding rubber rib guards the outer lip of the Borbet Y rim against curb abrasion, permanently solving the Model Y's infamous curb-rash vulnerability.</li>
+            <li><b>Why EVc (EV-Compatible) matters:</b> Designed specifically for heavy electric vehicles with instantaneous dual-motor torque. Offers significantly lower rolling resistance (preserving battery range) and specialized acoustic tread blocks that stop tire drone at 120–140 km/h.</li>
+            <li><b>Comparison with Michelin CrossClimate 2:</b> The Continental ASC 2 is noticeably quieter on dry/wet German Autobahn and tarmac, with lower rolling resistance and crisper steering response. Michelin has a small edge only in deep Alpine snow, making the Continental the superior all-round German daily choice.</li>
+            <li><b>Legal Compliance:</b> Fully certified with the 3PMSF (Alpine mountain/snowflake) symbol, meeting all German winter tire mandates (<i>StVO § 2 Abs. 3a</i>) year-round.</li>
+          </ul>
+        </div>
+
+        <h3>Why 19" Wheels Ride Noticeably Better:</h3>
+        <ul>
+          <li><b>+12.5% More Cushioning Sidewall (115 mm vs. 102 mm):</b> The 19" tire profile (255/45) gives you an extra 13 mm of air and rubber cushion at every wheel. Sharp expansion joints and potholes that jolt through the 20" Inductions are absorbed before reaching the chassis.</li>
+          <li><b>+5% to +8% Longer Highway Range:</b> Lower rotational inertia and better aerodynamics gain you approximately <b>20 to 30 km of extra real-world range</b> per charge.</li>
+          <li><b>Immunity to Curb Rash:</b> On 19" tires, the sidewall bulges slightly outward past the aluminum rim edge, creating a physical rubber bumper that protects your alloy wheels when parallel parking.</li>
+          <li><b>Zero Wheel Swapping Hassle:</b> Eliminates lifting 25 kg wheels twice a year and saves ~€120/year in garage swap/storage fees.</li>
+        </ul>
+
+        <h3>How to Get the Aggressive Black "Performance" Look on 19" Wheels:</h3>
+        <p>You don't have to sacrifice the aggressive dark stance of the 20"/21" Performance models to enjoy 19" comfort:</p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin:1rem 0 1.75rem 0;">
+          <div style="background:rgba(15,23,42,0.6); padding:1.25rem; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="color:#38bdf8; font-weight:700; font-size:1rem;">Style 1: Borbet Y Dark GT Package (~€45)</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:0.4rem 0;">Your included 19" Borbet Y wheels are already finished in <b>Titan Matt (dark anthracite)</b> with sporty Y-spokes. Add <b>matte black lug nut caps (€10)</b> + <b>black Tesla center cap emblems (€15)</b> + <b>Foliatec red brake caliper paint (€35)</b>. Delivers a wide, muscular European GT stance with zero curb anxiety.</p>
+          </div>
+          <div style="background:rgba(15,23,42,0.6); padding:1.25rem; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="color:#38bdf8; font-weight:700; font-size:1rem;">Style 2: Satin Black Powder Coating (~€280)</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:0.4rem 0;">Before mounting your new All-Weather tires, have a local powder-coating shop finish the 19" Borbet Y rims in <b>Satin Black</b> (the exact finish of the 20" Induction and 21" Performance wheels). Gives 100% OEM Performance black color matching for under €300.</p>
+          </div>
+          <div style="background:rgba(15,23,42,0.6); padding:1.25rem; border-radius:10px; border:1px solid var(--card-border);">
+            <div style="color:#38bdf8; font-weight:700; font-size:1rem;">Style 3: 19" Full-Cover Matte Black Aero Covers (~€130)</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:0.4rem 0;">If you ever run standard 19" Tesla rims, full-coverage matte black <b>Uberturbine / Induction style aero hubcaps</b> (from KAVO / Mayde / Shop4Tesla) clip on to cover 100% of the rim lip with zero silver showing. From 2 meters away, it looks 99% identical to a 21" Performance wheel, but retains full 19" pillowy comfort!</p>
+          </div>
+        </div>
+
+        <hr>
+
+        <h2>3. Exterior Juniper Styling Retrofits (Looks)</h2>
+
+        <h3>A. Front Continuous Cyber LED DRL Lightbar (~€95 – €130)</h3>
+        <p>The signature design feature of the Highland Model 3, Cybertruck, and Juniper is the full-width seamless front horizontal daytime running light bar. Aftermarket lightbar kits install cleanly along the frunk leading edge shutline, tapping into the 12V/16V accessory harness with zero wire splicing. Gives the car that unmistakable 2025+ cyber look at dusk.</p>
+
+        <h3>B. Rear "T E S L A" Block Lettering & Smoked Lightbar (~€15 – €120)</h3>
+        <p>Tesla eliminated the traditional chrome "T" emblem on the rear tailgate of modern models in favor of spaced-out block lettering:</p>
+        <ul>
+          <li><b>Satin Black "T E S L A" Trunk Lettering (~€15):</b> Remove the chrome T badge with fishing line/heat gun; apply the spaced-out template. Matches the 20" Induction wheels.</li>
+          <li><b>Continuous Rear Tailgate Lightbar Bridge (~€110):</b> Connects the left and right taillights across the trunk lid for a unified full-width horizontal red glow.</li>
+        </ul>
+
+        <h3>C. OEM-Style Matte Carbon Fiber Rear Lip Spoiler (~€95 – €120)</h3>
+        <p>The Performance model's rear spoiler extends the trunk trailing edge, reducing aerodynamic lift and completing the athletic silhouette. High-quality dry carbon fiber replicas with pre-applied 3M automotive tape install in 15 minutes.</p>
+
+        <hr>
+
+        <h2>4. Interior Highland & Juniper Cabin Upgrades</h2>
+
+        <h3>A. Wraparound Ambient Dynamic RGB Light Strip (~€85 – €120)</h3>
+        <p>Highland and Juniper introduced the ambient wraparound diffuse LED lighting strip running seamlessly from the door cards across the entire dashboard. Plug-and-play kits tuck cleanly into the existing dashboard and door gaps with zero exposed wires, controllable directly via an app or touch switch with 128 colors.</p>
+
+        <h3>B. Rear Passenger 7.2-Inch Android Touchscreen (~€180 – €220)</h3>
+        <p>One of Highland/Juniper's most celebrated features is the rear passenger screen between the front seats:</p>
+        <ul>
+          <li>Snaps onto the rear center console lower cover in 20 minutes (plugs into the blue CAN harness).</li>
+          <li>Allows rear passengers to control rear AC/heating, seat heaters, adjust the front passenger seat position, and watch YouTube, Netflix, or Disney+ on road trips.</li>
+        </ul>
+
+        <h3>C. Spring-Loaded Retractable Roller Parcel Shelf (~€75)</h3>
+        <p>Replaces the awkward open trunk with a smooth, one-touch retractable roller blind that snaps right into the molded C-pillar slots. Shuts out sunlight and prevents rear cargo visibility.</p>
+
+        <hr>
+
+        <h2>5. Cabin Sound Deadening & Acoustic Isolation (~€160)</h2>
+        <p>Juniper and Highland achieved a 30% reduction in road noise through targeted acoustic absorption. You can match this for very little money:</p>
+        <ul>
+          <li><b>Perimeter Door & Frunk D-Seals (~€35):</b> Precision-cut hollow silicone rubber seals that fill the door perimeter air gaps. Eliminates 130 km/h highway wind hiss and gives doors a heavy, solid German <i>"thud"</i> when closing.</li>
+          <li><b>Sub-Trunk & Rear Wheel Well Butyl Mats (~€60):</b> 1 box of 2mm Noico/Kilmat damping sheets pressed onto the bare metal of the sub-trunk well and rear wheel arches. Cuts hollow rear tire roar by 2 to 3 dB(A).</li>
+        </ul>
+
+        <hr>
+
+        <h2>6. Recommended Project Roadmap</h2>
+        <p>If you want the maximum return on your €1,500 budget, do it in this exact order:</p>
+        <ol>
+          <li><b>Day 1 (Immediate Comfort):</b> Order the <b>Retractable Roller Parcel Shelf (€75)</b> and <b>Door D-Seals (€35)</b> &rarr; instant €110 quietness upgrade.</li>
+          <li><b>Month 1 (The Ride):</b> Order the <b>OEM Tesla Comfort Struts/Dampers (~€600)</b> from the Tesla Service Center or <b>Koni FSD shocks (~€800)</b> and install at an independent garage.</li>
+          <li><b>Month 2 (The Looks):</b> Add the <b>Carbon Fiber Spoiler (€100)</b>, <b>Front Cyber LED lightbar (€110)</b>, and <b>RGB Ambient Strip (€95)</b>.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- TAB PANE 4: ON-SITE NOTES -->
+    <div class="tab-pane" id="pane-notes">
+      <div class="notes-container">
+        <h2 style="color:#fff; font-size:1.2rem; margin-bottom:0.5rem;">📝 On-Site Inspector Notes</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Type your notes, dealer conversations, tire tread numbers, or observations below. Everything auto-saves in real-time to your device.</p>
+        <textarea class="notes-textarea" id="inspectorNotes" placeholder="Enter any notes here on site (e.g. dealer comments, tire measurements, battery numbers)..."></textarea>
+        <div class="notes-bar">
+          <span id="notesSaveStatus" style="color:#22c55e; font-size:0.85rem; font-weight:600;">✓ All notes saved locally</span>
+          <button class="btn" onclick="clearNotes()" style="background:#ef4444; color:#fff;">Clear Notes</button>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /container -->
+
+  <!-- FIXED BOTTOM DOCK (For Checklist Tab) -->
+  <div class="bottom-bar-wrapper" id="bottomDock">
+    <div class="bottom-bar">
+      <div class="stats" id="statusCount">0 of 81 items checked (0%)</div>
+      <button class="btn" onclick="resetAll()">Reset Checklist</button>
+    </div>
+  </div>
+
+  <script>
+    // Safe LocalStorage Wrapper (Prevents crashes in private browsing or strict file:// sandboxes)
+    const safeStorage = {
+      getItem: (key) => {
+        try { return localStorage.getItem(key); } catch(e) { return null; }
+      },
+      setItem: (key, val) => {
+        try { localStorage.setItem(key, val); } catch(e) {}
+      },
+      removeItem: (key) => {
+        try { localStorage.removeItem(key); } catch(e) {}
+      }
+    };
+
+    // Tab Switching with Persistence
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+      
+      const targetPane = document.getElementById('pane-' + tabId);
+      const targetBtn = document.getElementById('tabBtn-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+      if (targetBtn) targetBtn.classList.add('active');
+      
+      const bottomDock = document.getElementById('bottomDock');
+      if (bottomDock) {
+        bottomDock.style.display = (tabId === 'checklist') ? 'block' : 'none';
+      }
+      
+      safeStorage.setItem('teslaSuiteActiveTab', tabId);
+    }
+    window.switchTab = switchTab;
+
+    // Checkbox Progress Tracking with Persistence
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const progressBar = document.getElementById('progressBar');
+    const statusCount = document.getElementById('statusCount');
+    const tabBadgeCount = document.getElementById('tabBadgeCount');
+
+    function updateProgress() {
+      const total = checkboxes.length;
+      let checked = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) checked++;
+        safeStorage.setItem(cb.id, cb.checked ? 'true' : 'false');
+      });
+      const pct = Math.round((checked / total) * 100);
+      if (progressBar) progressBar.style.width = pct + '%';
+      if (statusCount) statusCount.textContent = checked + ' of ' + total + ' items checked (' + pct + '%)';
+      if (tabBadgeCount) tabBadgeCount.textContent = checked + '/' + total;
+    }
+
+    checkboxes.forEach(cb => {
+      const saved = safeStorage.getItem(cb.id);
+      if (saved === 'true') cb.checked = true;
+      cb.addEventListener('change', updateProgress);
+    });
+
+    function resetAll() {
+      if (confirm('Reset all checkboxes?')) {
+        checkboxes.forEach(cb => {
+          cb.checked = false;
+          safeStorage.removeItem(cb.id);
+        });
+        updateProgress();
+      }
+    }
+
+    // Notes Auto-Save
+    const notesArea = document.getElementById('inspectorNotes');
+    const notesStatus = document.getElementById('notesSaveStatus');
+    if (notesArea) {
+      notesArea.value = safeStorage.getItem('teslaSuiteNotes') || '';
+      notesArea.addEventListener('input', () => {
+        safeStorage.setItem('teslaSuiteNotes', notesArea.value);
+        notesStatus.textContent = '✓ Saved ' + new Date().toLocaleTimeString();
+      });
+    }
+
+    function clearNotes() {
+      if (confirm('Clear all your notes?')) {
+        notesArea.value = '';
+        safeStorage.removeItem('teslaSuiteNotes');
+        notesStatus.textContent = 'Notes cleared';
+      }
+    }
+
+    // Initial Load
+    updateProgress();
+    const savedTab = safeStorage.getItem('teslaSuiteActiveTab') || 'checklist';
+    switchTab(savedTab);
+  </script>
+</body>
+</html>
